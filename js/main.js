@@ -108,7 +108,7 @@ $(`#loginForm`).submit(()=> {
 	event.preventDefault();
 	let loginUsername = $(`#loginUsername`).val();
 	let loginPassword = $(`#loginPassword`).val();
-
+    console.log(`fdfh`);
 	if (loginUsername.length !== 0 && loginPassword.length !== 0) {
 		$.ajax({
 			url: `${url}/login`,
@@ -122,6 +122,7 @@ $(`#loginForm`).submit(()=> {
 				console.log(err);
 			},
 			success: (result)=> {
+                console.log(result);
 				sessionStorage.userId = result._id;
 				sessionStorage.username = result.username;
 				sessionStorage.name = result.name;

@@ -3,11 +3,14 @@
 ### Ensure that you have NPM and Node.js installed on your computer
 To get set up, clone or download the repo, then rename the `configExample.json` file to `config.json`.
 
+You will need a google maps key for this project. You can get one at [here](https://developers.google.com/maps/documentation/embed/get-api-key).
+
 If you are going to be running this site on your own computer, your `config.json` file should look something like this:
 ```json
 {
 	"SERVER_URL": "http://localhost",
-	"SERVER_PORT": "3000"
+	"SERVER_PORT": "3000",
+	"GOOGLE_MAPS_KEY": "abcdefghijklmnopqrstuvwxyz"
 }
 ```
 However, if you are running this project inside a virtual server, you will most likely need to change the `SERVER_URL` section to match whatever your virtual server is set to.

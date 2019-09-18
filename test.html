@@ -1,0 +1,28 @@
+<h2>Add A Listing</h2>
+<form enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="listingTitle">Title</label>
+        <input type="text" class="form-control" id="listingTitle">
+    </div>
+    <div class="form-group">
+        <label for="listingDescription">Description</label>
+        <input type="text" class="form-control" id="listingDescription">
+    </div>
+    <div class="form-group">
+        <label for="listingPrice">Price</label>
+        <input type="number" class="form-control" id="listingPrice">
+    </div>
+    <div class="custom-file">
+        <label class="custom-file-label" for="listingImageFile">Upload an Image</label>
+        <input type="file" class="custom-file-input" id="listingImageFile">
+    </div>
+    <button type="submit" class="btn btn-primary mt-2" id="listingForm">Submit</button>
+</form>
+
+<h2>Add A Comment</h2>
+<form>
+    <div class="form-group">
+        <input type="text" class="form-control" id="userComment">
+    </div>
+    <button type="submit" class="btn btn-primary mt-2" id="addComment">Post Comment</button>
+</form>

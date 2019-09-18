@@ -7,40 +7,63 @@
 		<link href="css/main.min.css" rel="stylesheet">
 	</head>
 	<body>
-		<div class="container">
+		<div class="navbar bg-dark text-white d-flex justify-content-end">
+			<ul class="nav">
+  				<li class="nav-item">
+    				<a class="nav-link" href="#">Home</a>
+  				</li>
+  				<li class="nav-item">
+    				<a class="nav-link" href="#">Listings</a>
+  				</li>
+  				<li class="nav-item">
+    				<button type="button" name="login" class="btn btn-outline-light ml-1" id="loginBtn">LOGIN</button>
+  				</li>
+  				<li class="nav-item">
+    				<button type="button" name="register" class="btn btn-outline-light" id="registerBtn">REGISTER</button>
+  				</li>
+			</ul>
+			<div class="container d-flex justify-content-between">
+
+
+			<button type="button" name="logout" class="btn btn-outline-light d-none" id="logoutBtn">LOGOUT</button>
+		</div>
+
+		<div class="modal fade" id="registerModal" tabindex="-1" role="dialog">
 			<h2>Register A User</h2>
 			<form>
-  				<div class="form-group">
-    				<label for="registerName">Name</label>
-    				<input type="text" class="form-control validationField" id="registerName" required>
-		  		</div>
-  				<div class="form-group">
-    				<label for="registerAddress">Address</label>
-    				<input type="text" class="form-control validationField" id="registerAddress" required>
-  				</div>
 				<div class="form-group">
-    				<label for="registerUsername">Username</label>
-    				<input type="text" class="form-control validationField" id="registerUsername" required>
-  				</div>
+					<label for="registerName">Name</label>
+					<input type="text" class="form-control validationField" id="registerName" required>
+				</div>
 				<div class="form-group">
-    				<label for="registerPassword">Password</label>
-    				<input type="password" class="form-control validationField" id="registerPassword" required>
-  				</div>
+					<label for="registerAddress">Address</label>
+					<input type="text" class="form-control validationField" id="registerAddress" required>
+				</div>
 				<div class="form-group">
-    				<label for="registerConfirmPassword">Confirm Password</label>
-    				<input type="password" class="form-control validationField" id="registerConfirmPassword" required>
-  				</div>
+					<label for="registerUsername">Username</label>
+					<input type="text" class="form-control validationField" id="registerUsername" required>
+				</div>
 				<div class="form-group">
-    				<label for="registerEmail">Email</label>
-    				<input type="email" class="form-control validationField" id="registerEmail" required>
-  				</div>
+					<label for="registerPassword">Password</label>
+					<input type="password" class="form-control validationField" id="registerPassword" required>
+				</div>
 				<div class="form-group">
-    				<label for="registerDOB">Date of Birth</label>
-    				<input type="date" class="form-control validationField" id="registerDOB" required>
-  				</div>
-  				<button type="submit" class="btn btn-primary mt-2" id="registerForm">Submit</button>
+					<label for="registerConfirmPassword">Confirm Password</label>
+					<input type="password" class="form-control validationField" id="registerConfirmPassword" required>
+				</div>
+				<div class="form-group">
+					<label for="registerEmail">Email</label>
+					<input type="email" class="form-control validationField" id="registerEmail" required>
+				</div>
+				<div class="form-group">
+					<label for="registerDOB">Date of Birth</label>
+					<input type="date" class="form-control validationField" id="registerDOB" required>
+				</div>
+				<button type="submit" class="btn btn-primary mt-2" id="registerForm">Submit</button>
 			</form>
+		</div>
 
+		<div class="modal fade" id="loginModal" tabindex="-1" role="dialog">
 			<h2>Login</h2>
 			<form id="loginForm">
 				<div class="form-group">
@@ -53,39 +76,8 @@
 				</div>
 				<button type="submit" class="btn btn-primary">Login</button>
 			</form>
-
-			<h2>Logout</h2>
-			<button id="logoutBtn" class="btn btn-primary">Logout</button>
-
-			<h2>Add A Listing</h2>
-			<form enctype="multipart/form-data">
-  				<div class="form-group">
-    				<label for="listingTitle">Title</label>
-    				<input type="text" class="form-control" id="listingTitle">
-		  		</div>
-  				<div class="form-group">
-    				<label for="listingDescription">Description</label>
-    				<input type="text" class="form-control" id="listingDescription">
-  				</div>
-				<div class="form-group">
-    				<label for="listingPrice">Price</label>
-    				<input type="number" class="form-control" id="listingPrice">
-  				</div>
-				<div class="custom-file">
-					<label class="custom-file-label" for="listingImageFile">Upload an Image</label>
-    				<input type="file" class="custom-file-input" id="listingImageFile">
-  				</div>
-  				<button type="submit" class="btn btn-primary mt-2" id="listingForm">Submit</button>
-			</form>
-
-			<h2>Add A Comment</h2>
-			<form>
-				<div class="form-group">
-					<input type="text" class="form-control" id="userComment">
-				</div>
-				<button type="submit" class="btn btn-primary mt-2" id="addComment">Post Comment</button>
-			</form>
 		</div>
+
 		<script src="node_modules\jquery\dist\jquery.min.js" charset="utf-8"></script>
 		<script src="node_modules\popper.js\dist\umd\popper.min.js" charset="utf-8"></script>
 		<script src="node_modules\bootstrap\dist\js\bootstrap.min.js" charset="utf-8"></script>

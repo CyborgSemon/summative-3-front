@@ -3,6 +3,7 @@ let mapsKey;
 
 $(document).ready(function(){
 	console.log(sessionStorage);
+	$(`#registerModal`).hide();
 });
 
 $.ajax({
@@ -84,6 +85,13 @@ $(`#registerForm`).click(()=> {
 				sessionStorage.name = result.name;
 				sessionStorage.email = result.email;
 				sessionStorage.address = result.address;
+				$(`#registerName`).val(null);
+			    $(`#registerAddress`).val(null);
+			    $(`#registerUsername`).val(null);
+			    $(`#registerPassword`).val(null);
+			    $(`#registerConfirmPassword`).val(null);
+			    $(`#registerEmail`).val(null);
+			    $(`#registerDOB`).val(null);
             },
             error: (err)=> {
                 console.log(err);
@@ -123,6 +131,9 @@ $(`#listingForm`).click(() => {
             processData: false,
             success: (data)=> {
                 console.log(`successful`);
+				$(`#listingTitle`).val(null);
+			    $(`#listingDescription`).val(null);
+			    $(`#listingPrice`).val(null);
             },
             error: (err)=> {
                 console.log(err);
@@ -151,6 +162,8 @@ $(`#loginForm`).submit(()=> {
 			},
 			success: (result)=> {
                 console.log(result);
+				$(`#loginUsername`).val(null);
+				$(`#loginPassword`).val(null);
 				sessionStorage.userId = result._id;
 				sessionStorage.username = result.username;
 				sessionStorage.name = result.name;
@@ -245,4 +258,9 @@ $(`#productList`).on(`click`, `.removeBtn`, ()=> {
             console.log(`something went wrong deleting the product`);
         }
     });
+});
+
+$(`#loginBtn`).on(`click`, ()=> {
+	event.preventDefault();
+	
 });

@@ -1,6 +1,10 @@
 let url;
 let mapsKey;
 
+$(document).ready(function(){
+	console.log(sessionStorage);
+});
+
 $.ajax({
 	url: `config.json`,
 	type: `GET`,
@@ -55,6 +59,11 @@ $(`#registerForm`).click(()=> {
             },
             success: (result)=> {
                 console.log(result);
+				sessionStorage.userId = result._id;
+				sessionStorage.username = result.username;
+				sessionStorage.name = result.name;
+				sessionStorage.email = result.email;
+				sessionStorage.address = result.address;
             },
             error: (err)=> {
                 console.log(err);
@@ -131,5 +140,35 @@ $(`#loginForm`).submit(()=> {
 		});
 	} else {
 		console.log(`You have not filled in all the login inputs`);
+	}
+});
+
+$(`#addComment`).click(()=> {
+	event.preventDefault();
+	let userComment = $(`#userComment`).val();
+	if(userComment.length === 0){
+		console.log(`please enter a comment`);
+	}else{
+		if(sessionStorage.length !== 0){
+			$.ajax({
+				url: `${url}/addAComment`,
+				type: `POST`,
+				data: {
+					commentUsername: sessionStorage.username,
+					commentText: userComment,
+					commentDate: Date.now()
+				},
+				success: (data)=> {
+	                console.log(`comment posted`);
+	            },
+	            error: (err)=> {
+	                console.log(err);
+	                console.log(`did not post comment`);
+	            }
+			});
+		}else {
+			console.log(`cannot post comment`);
+		}
+
 	}
 });

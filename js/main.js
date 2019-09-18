@@ -1,7 +1,7 @@
 console.log('JS has loaded');
 console.log(`yeet`);
 
-$(`#listingList`).on(`click`, `.editBtn` ()=> {
+$(`#listingList`).on(`click`, `.editBtn`, ()=> {
     event.preventDefault();
     if (!sessionStorage.userId) {
         alert(`401, permission denied`);

@@ -21,7 +21,7 @@ module.exports = function(grunt) {
 		uglify: {
 			my_target: {
 				files: {
-					'js/main.min.js': ['js/main.js']
+					'js/main.min.js': [`js/main.js`]
 				},
 				options: {
 					esversion: 6
@@ -29,23 +29,23 @@ module.exports = function(grunt) {
 			}
 		},
 		jshint: {
-			files: ['js/*.js', '!js/*.min.js'],
+			files: [`js/*.js`, `!js/*.min.js`],
 			options: {
 				esversion: 6
 			}
 		},
 		watch: {
 			js: {
-				files: ['js/*.js', '!js/*.min.js'],
-				tasks: ['jshint', 'uglify']
+				files: [`js/*.js`, `!js/*.min.js`],
+				tasks: [`jshint`, `uglify`]
 			},
 			sass: {
-				files: ['scss/*.scss'],
-				tasks: ['sass']
+				files: [`scss/*.scss`],
+				tasks: [`sass`]
 			},
 			cssmin: {
-				files: ['css/*.css', '!css/*.min.css'],
-				tasks: ['cssmin']
+				files: [`css/*.css`, `!css/*.min.css`],
+				tasks: [`cssmin`]
 			}
 		}
 	});

@@ -4,7 +4,7 @@ let mapsKey;
 $.ajax({
 	url: `config.json`,
 	type: `GET`,
-	dataType: 'json',
+	dataType: `json`,
 	error: (err)=> {
 		console.log(`There was an issue getting the config file`);
 		console.log(err);
@@ -24,23 +24,23 @@ $(`#registerForm`).click(()=> {
     const registerConfirmPassword = $(`#registerConfirmPassword`).val();
     const registerEmail = $(`#registerEmail`).val();
     const registerDOB = $(`#registerDOB`).val();
-    if(registerName.length === 0){
+    if (registerName.length === 0) {
         console.log(`please enter a name for register`);
-    }else if(registerAddress.length === 0){
+    } else if (registerAddress.length === 0) {
         console.log(`please enter an address for register`);
-    }else if(registerUsername.length === 0){
+    } else if (registerUsername.length === 0) {
         console.log(`please enter a username for register`);
-    }else if(registerPassword.length === 0){
+    } else if (registerPassword.length === 0) {
         console.log(`please enter a password for register`);
-    }else if(registerConfirmPassword.length === 0){
+    } else if (registerConfirmPassword.length === 0) {
         console.log(`please confirm password`);
-    }else if(registerPassword !== registerConfirmPassword){
+    } else if (registerPassword !== registerConfirmPassword) {
         console.log(`password does not match`);
-    }else if(registerEmail.length === 0){
+    } else if (registerEmail.length === 0) {
         console.log(`please enter an email for register`);
-    }else if(registerDOB.length === 0){
+    } else if (registerDOB.length === 0) {
         console.log(`please enter a date of birth for register`);
-    }else{
+    } else{
         $.ajax({
             url: `${url}/registerUser`,
             type: `POST`,
@@ -53,12 +53,12 @@ $(`#registerForm`).click(()=> {
                 dob: registerDOB,
                 registerDate: Date.now()
             },
-            success:function(result){
+            success: (result)=> {
                 console.log(result);
             },
-            error:function(err){
+            error: (err)=> {
                 console.log(err);
-                console.log('something went wrong');
+                console.log(`something went wrong`);
             }
         });
     }
@@ -69,13 +69,13 @@ $(`#listingForm`).click(() => {
     const listingTitle = $(`#listingTitle`).val();
     const listingDescription = $(`#listingDescription`).val();
     const listingPrice = $(`#listingPrice`).val();
-    if(listingTitle.length === 0){
+    if (listingTitle.length === 0) {
         console.log(`listing title needs an input`);
-    }else if(listingDescription.length === 0){
+    } else if (listingDescription.length === 0) {
         console.log(`listing description needs an input`);
-    }else if(listingPrice.length === 0){
+    } else if (listingPrice.length === 0) {
         console.log(`listing price needs an input`);
-    }else {
+    } else {
         let fd = new FormData();
         const file = $(`#listingImageFile`)[0].files[0];
         fd.append(`filePath`, file);
@@ -92,10 +92,10 @@ $(`#listingForm`).click(() => {
             data: fd,
             contentType: false,
             processData: false,
-            success:function(data){
+            success: (data)=> {
                 console.log(`successful`);
             },
-            error:function(err){
+            error: (err)=> {
                 console.log(err);
                 console.log(`did not work`);
             }
@@ -108,7 +108,6 @@ $(`#loginForm`).submit(()=> {
 	event.preventDefault();
 	let loginUsername = $(`#loginUsername`).val();
 	let loginPassword = $(`#loginPassword`).val();
-    console.log(`fdfh`);
 	if (loginUsername.length !== 0 && loginPassword.length !== 0) {
 		$.ajax({
 			url: `${url}/login`,
@@ -131,6 +130,6 @@ $(`#loginForm`).submit(()=> {
 			}
 		});
 	} else {
-		console.log('You have not filled in all the login inputs');
+		console.log(`You have not filled in all the login inputs`);
 	}
 });

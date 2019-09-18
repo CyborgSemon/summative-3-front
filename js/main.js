@@ -133,3 +133,7 @@ $(`#loginForm`).submit(()=> {
 		console.log(`You have not filled in all the login inputs`);
 	}
 });
+
+$(`#logoutBtn`).click(()=> {
+	sessionStorage.clear();
+});

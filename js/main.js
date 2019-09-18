@@ -15,7 +15,7 @@ $(`#listingList`).on(`click`, `.editBtn` ()=> {
             userId: sessionStorage.userId
         },
         dataType: `json`,
-        success:function(product){
+        success:(product)=> {
             console.log(product);
             $(`#listingTitle`).val(product.title);
             $(`#listingDescription`).val(product.description);
@@ -24,14 +24,14 @@ $(`#listingList`).on(`click`, `.editBtn` ()=> {
             $(`#heading`).text(`Edit Product`);
             editing = true;
         },
-        error:function(err){
+        error:(err)=> {
             console.log(err);
             console.log(`something went wrong with getting the single product`);
         }
     })
 });
 
-$(`#productList`).on(`click`, `.removeBtn`, function(){
+$(`#productList`).on(`click`, `.removeBtn`, ()=> {
     event.preventDefault();
     if (!sessionStorage.userId) {
         alert(`401, permission denied`);
@@ -42,7 +42,7 @@ $(`#productList`).on(`click`, `.removeBtn`, function(){
     $.ajax({
         url: `${url}/listing/${id}`,
         type: `DELETE`,
-        success:function(result){
+        success:(result)=> {
             li.remove();
         },
         error:function(err) {

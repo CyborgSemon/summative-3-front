@@ -1,6 +1,10 @@
 let url;
 let mapsKey;
 
+$(document).ready(function(){
+	console.log(sessionStorage);
+});
+
 $.ajax({
 	url: `config.json`,
 	type: `GET`,
@@ -17,6 +21,7 @@ $.ajax({
 
 $(`#registerForm`).click(()=> {
     event.preventDefault();
+	let passFail = true;
     const registerName = $(`#registerName`).val();
     const registerAddress = $(`#registerAddress`).val();
     const registerUsername = $(`#registerUsername`).val();
@@ -25,22 +30,41 @@ $(`#registerForm`).click(()=> {
     const registerEmail = $(`#registerEmail`).val();
     const registerDOB = $(`#registerDOB`).val();
     if (registerName.length === 0) {
-        console.log(`please enter a name for register`);
-    } else if (registerAddress.length === 0) {
-        console.log(`please enter an address for register`);
-    } else if (registerUsername.length === 0) {
-        console.log(`please enter a username for register`);
-    } else if (registerPassword.length === 0) {
-        console.log(`please enter a password for register`);
-    } else if (registerConfirmPassword.length === 0) {
-        console.log(`please confirm password`);
-    } else if (registerPassword !== registerConfirmPassword) {
-        console.log(`password does not match`);
-    } else if (registerEmail.length === 0) {
-        console.log(`please enter an email for register`);
-    } else if (registerDOB.length === 0) {
-        console.log(`please enter a date of birth for register`);
-    } else{
+        $(`#registerName`).addClass(`is-invalid`);
+		passFail = false;
+    }
+	if (registerAddress.length === 0) {
+        $(`#registerAddress`).addClass(`is-invalid`);
+		passFail = false;
+    }
+	if (registerUsername.length === 0) {
+        $(`#registerUsername`).addClass(`is-invalid`);
+		passFail = false;
+    }
+	if (registerPassword.length === 0) {
+        $(`#registerPassword`).addClass(`is-invalid`);
+		passFail = false;
+    }
+	if (registerConfirmPassword.length === 0) {
+        $(`#registerConfirmPassword`).addClass(`is-invalid`);
+		passFail = false;
+    }
+	if (registerPassword !== registerConfirmPassword) {
+        $(`#registerConfirmPassword`).addClass(`is-invalid`);
+        $(`#registerConfirmPassword`).parent().append(`<div class="invalid-feedback">Passwords do not match</div>`);
+		passFail = false;
+    }else {
+		$(`#registerConfirmPassword`).parent().children().last().remove();
+	}
+	if (registerEmail.length === 0) {
+        $(`#registerEmail`).addClass(`is-invalid`);
+		passFail = false;
+    }
+	if (registerDOB.length === 0) {
+        $(`#registerDOB`).addClass(`is-invalid`);
+		passFail = false;
+    }
+	if (passFail) {
         $.ajax({
             url: `${url}/registerUser`,
             type: `POST`,
@@ -55,6 +79,11 @@ $(`#registerForm`).click(()=> {
             },
             success: (result)=> {
                 console.log(result);
+				sessionStorage.userId = result._id;
+				sessionStorage.username = result.username;
+				sessionStorage.name = result.name;
+				sessionStorage.email = result.email;
+				sessionStorage.address = result.address;
             },
             error: (err)=> {
                 console.log(err);
@@ -136,4 +165,34 @@ $(`#loginForm`).submit(()=> {
 
 $(`#logoutBtn`).click(()=> {
 	sessionStorage.clear();
+});
+
+$(`#addComment`).click(()=> {
+	event.preventDefault();
+	let userComment = $(`#userComment`).val();
+	if(userComment.length === 0){
+		console.log(`please enter a comment`);
+	}else{
+		if(sessionStorage.length !== 0){
+			$.ajax({
+				url: `${url}/addAComment`,
+				type: `POST`,
+				data: {
+					commentUsername: sessionStorage.username,
+					commentText: userComment,
+					commentDate: Date.now()
+				},
+				success: (data)=> {
+	                console.log(`comment posted`);
+	            },
+	            error: (err)=> {
+	                console.log(err);
+	                console.log(`did not post comment`);
+	            }
+			});
+		}else {
+			console.log(`cannot post comment`);
+		}
+
+	}
 });

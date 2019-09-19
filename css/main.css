@@ -4,4 +4,7 @@
   box-sizing: border-box;
   font-family: 'Roboto', sans-serif; }
 
+.invalid-feedback {
+  display: none; }
+
 /*# sourceMappingURL=main.css.map */

@@ -1,7 +1,16 @@
 let url;
 let mapsKey;
 
-console.log(sessionStorage);
+$(document).ready(function(){
+	console.log(sessionStorage);
+	if(sessionStorage.username){
+		console.log(`you are logged in`);
+		$(`#registerModalBtn`).addClass(`d-none`);
+		$(`#loginModalBtn`).addClass(`d-none`);
+    	$(`#logoutBtn`).removeClass(`d-none`);
+		$(`#addAListing`).removeClass(`d-none`);
+	}
+});
 
 $.ajax({
 	url: `config.json`,
@@ -99,6 +108,13 @@ $(`#registerForm`).click(()=> {
 				sessionStorage.name = result.name;
 				sessionStorage.email = result.email;
 				sessionStorage.address = result.address;
+				$(`#registerName`).val(null);
+			    $(`#registerAddress`).val(null);
+			    $(`#registerUsername`).val(null);
+			    $(`#registerPassword`).val(null);
+			    $(`#registerConfirmPassword`).val(null);
+			    $(`#registerEmail`).val(null);
+			    $(`#registerDOB`).val(null);
 			},
 			error: (err)=> {
 				console.log(err);
@@ -167,6 +183,12 @@ $(`#listingForm`).click(() => {
 				processData: false,
 				success: (data)=> {
 					console.log(`successful`);
+					$(`#listingTitle`).val(null);
+				    $(`#listingDescription`).val(null);
+				    $(`#listingPrice`).val(null);
+					$(`#listingImageFile`).val(null);
+					$(`#listingModal`).modal(`hide`);
+					$(`.toastListing`).removeClass(`d-none`);
 				},
 				error: (err)=> {
 					console.log(err);
@@ -220,6 +242,11 @@ $(`#loginForm`).submit(()=> {
 				sessionStorage.name = result.name;
 				sessionStorage.email = result.email;
 				sessionStorage.address = result.address;
+				$(`#loginModal`).modal(`hide`);
+				$(`#registerModalBtn`).addClass(`d-none`);
+				$(`#loginModalBtn`).addClass(`d-none`);
+				$(`#logoutBtn`).removeClass(`d-none`);
+				$(`#addAListing`).removeClass(`d-none`);
 			}
 		});
 	} else {
@@ -229,6 +256,10 @@ $(`#loginForm`).submit(()=> {
 
 $(`#logoutBtn`).click(()=> {
 	sessionStorage.clear();
+	$(`#logoutBtn`).addClass(`d-none`);
+	$(`#addAListing`).addClass(`d-none`);
+	$(`#registerModalBtn`).removeClass(`d-none`);
+	$(`#loginModalBtn`).removeClass(`d-none`);
 });
 
 $(`#addComment`).click(()=> {

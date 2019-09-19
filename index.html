@@ -7,103 +7,173 @@
 		<link href="css/main.min.css" rel="stylesheet">
 	</head>
 	<body>
-		<div class="container">
-			<h2>Register A User</h2>
-			<form>
-  				<div class="form-group">
-    				<label for="registerName">Name</label>
-    				<input type="text" class="form-control validationField" id="registerName" required>
-					<div class="invalid-feedback">Name is not valid</div>
-		  		</div>
-  				<div class="form-group">
-    				<label for="registerAddress">Address</label>
-    				<input type="text" class="form-control validationField" id="registerAddress" required>
-					<div class="invalid-feedback">Address is not valid</div>
-  				</div>
-				<div class="form-group">
-    				<label for="registerUsername">Username</label>
-    				<input type="text" class="form-control validationField" id="registerUsername" required>
-					<div class="invalid-feedback">Username is not valid</div>
-  				</div>
-				<div class="form-group">
-    				<label for="registerPassword">Password</label>
-    				<input type="password" class="form-control validationField" id="registerPassword" required>
-					<div class="invalid-feedback">Passwords do not match</div>
-  				</div>
-				<div class="form-group">
-    				<label for="registerConfirmPassword">Confirm Password</label>
-    				<input type="password" class="form-control validationField" id="registerConfirmPassword" required>
-					<div class="invalid-feedback">Passwords do not match</div>
-  				</div>
-				<div class="form-group">
-    				<label for="registerEmail">Email</label>
-    				<input type="email" class="form-control validationField" id="registerEmail" required>
-					<div class="invalid-feedback">Email is not valid</div>
-  				</div>
-				<div class="form-group">
-    				<label for="registerDOB">Date of Birth</label>
-    				<input type="date" class="form-control validationField" id="registerDOB" required>
-					<div class="invalid-feedback">DOB is not valid</div>
-  				</div>
-  				<button type="submit" class="btn btn-primary mt-2" id="registerForm">Submit</button>
-			</form>
-
-			<h2>Login</h2>
-			<form id="loginForm">
-				<div class="form-group">
-					<label for="loginUsername">Username</label>
-					<input type="text" class="form-control" id="loginUsername">
-					<div class="invalid-feedback">Username is not valid</div>
-				</div>
-				<div class="form-group">
-					<label for="loginPassword">Password</label>
-					<input type="password" class="form-control" id="loginPassword">
-					<div class="invalid-feedback">Password is not valid</div>
-				</div>
-				<button type="submit" class="btn btn-primary">Login</button>
-			</form>
-
-			<h2>Logout</h2>
-			<button id="logoutBtn" class="btn btn-primary">Logout</button>
-
-			<h2>Add A Listing</h2>
-			<form enctype="multipart/form-data">
-  				<div class="form-group">
-    				<label for="listingTitle">Title</label>
-    				<input type="text" class="form-control" id="listingTitle">
-					<div class="invalid-feedback">Title is not valid</div>
-		  		</div>
-  				<div class="form-group">
-    				<label for="listingDescription">Description</label>
-    				<input type="text" class="form-control" id="listingDescription">
-					<div class="invalid-feedback">Description is not valid</div>
-  				</div>
-				<div class="form-group">
-    				<label for="listingPrice">Price</label>
-    				<input type="number" class="form-control" id="listingPrice">
-					<div class="invalid-feedback">Price is not valid</div>
-  				</div>
-				<div class="custom-file">
-					<label class="custom-file-label" for="listingImageFile">Upload an Image</label>
-    				<input type="file" class="custom-file-input" id="listingImageFile">
-					<div class="invalid-feedback">File is not valid</div>
-  				</div>
-  				<button type="submit" class="btn btn-primary mt-2" id="listingForm">Submit</button>
-			</form>
-
-			<h2>Add A Comment</h2>
-			<form>
-				<div class="form-group">
-					<label for="listingDescription">Comment text</label>
-					<input type="text" class="form-control" id="userComment">
-					<div class="invalid-feedback">Comment is not valid</div>
-				</div>
-				<button type="submit" class="btn btn-primary mt-2" id="addComment">Post Comment</button>
-			</form>
+		<div class="navbar bg-dark text-white d-flex justify-content-end">
+			<ul class="nav">
+				<li class="nav-item">
+					<a class="nav-link" href="#">Home</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">Listings</a>
+				</li>
+				<li class="nav-item">
+					<button type="button" name="login" data-toggle="modal" data-target="#loginModal" class="btn btn-outline-light ml-1" id="loginModalBtn">LOGIN</button>
+				</li>
+				<li class="nav-item">
+					<button type="button" name="register" data-toggle="modal" data-target="#registerModal" class="btn btn-outline-light" id="registerModalBtn">REGISTER</button>
+				</li>
+				<li class="nav-item">
+					<button type="button" name="addAListing" data-toggle="modal" data-target="#listingModal" class="btn btn-outline-light d-none" id="addAListing">ADD A LISTING</button>
+				</li>
+				<li class="nav-item">
+					<button type="button" name="logout" class="btn btn-outline-light d-none" id="logoutBtn">LOGOUT</button>
+				</li>
+			</ul>
 		</div>
-		<script src="node_modules\jquery\dist\jquery.min.js" charset="utf-8"></script>
-		<script src="node_modules\popper.js\dist\umd\popper.min.js" charset="utf-8"></script>
-		<script src="node_modules\bootstrap\dist\js\bootstrap.min.js" charset="utf-8"></script>
-		<script src="js/main.min.js"></script>
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col">
+
+				</div>
+			</div>
+		</div>
+
+		<div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="register">Register</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<form>
+							<div class="form-group">
+								<label for="registerName">Name</label>
+								<input type="text" class="form-control validationField" id="registerName" required>
+								<div class="invalid-feedback">Name is not valid</div>
+							</div>
+							<div class="form-group">
+								<label for="registerAddress">Address</label>
+								<input type="text" class="form-control validationField" id="registerAddress" required>
+								<div class="invalid-feedback">Address is not valid</div>
+							</div>
+							<div class="form-group">
+								<label for="registerUsername">Username</label>
+								<input type="text" class="form-control validationField" id="registerUsername" required>
+								<div class="invalid-feedback">Username is not valid</div>
+							</div>
+							<div class="form-group">
+								<label for="registerPassword">Password</label>
+								<input type="password" class="form-control validationField" id="registerPassword" required>
+								<div class="invalid-feedback">Passwords do not match</div>
+							</div>
+							<div class="form-group">
+								<label for="registerConfirmPassword">Confirm Password</label>
+								<input type="password" class="form-control validationField" id="registerConfirmPassword" required>
+								<div class="invalid-feedback">Passwords do not match</div>
+							</div>
+							<div class="form-group">
+								<label for="registerEmail">Email</label>
+								<input type="email" class="form-control validationField" id="registerEmail" required>
+								<div class="invalid-feedback">Email is not valid</div>
+							</div>
+							<div class="form-group">
+								<label for="registerDOB">Date of Birth</label>
+								<input type="date" class="form-control validationField" id="registerDOB" required>
+								<div class="invalid-feedback">DOB is not valid</div>
+							</div>
+							<button type="submit" class="btn btn-primary mt-2" id="registerForm">Register</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="login">Login</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<form id="loginForm">
+							<div class="form-group">
+								<label for="loginUsername">Username</label>
+								<input type="text" class="form-control" id="loginUsername">
+								<div class="invalid-feedback">Username is not valid</div>
+							</div>
+							<div class="form-group">
+								<label for="loginPassword">Password</label>
+								<input type="password" class="form-control" id="loginPassword">
+								<div class="invalid-feedback">Password is not valid</div>
+							</div>
+							<button type="submit" class="btn btn-primary">Login</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal fade" id="listingModal" tabindex="-1" role="dialog" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="login">Add A Listing</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<form enctype="multipart/form-data">
+							<div class="form-group">
+								<label for="listingTitle">Title</label>
+								<input type="text" class="form-control" id="listingTitle">
+								<div class="invalid-feedback">Title is not valid</div>
+							</div>
+							<div class="form-group">
+								<label for="listingDescription">Description</label>
+								<input type="text" class="form-control" id="listingDescription">
+								<div class="invalid-feedback">Description is not valid</div>
+							</div>
+							<div class="form-group">
+								<label for="listingPrice">Price</label>
+								<input type="number" class="form-control" id="listingPrice">
+								<div class="invalid-feedback">Price is not valid</div>
+							</div>
+							<div class="custom-file">
+								<label class="custom-file-label" for="listingImageFile">Upload an Image</label>
+								<input type="file" class="custom-file-input" id="listingImageFile">
+								<div class="invalid-feedback">File is not valid</div>
+							</div>
+						<button type="submit" class="btn btn-primary mt-2" id="listingForm">Submit</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px;" class="d-none toastListing">
+		<div class="toast" style="position: absolute; top: 0; right: 0;">
+			<div class="toast-header">
+				<img src="..." class="rounded mr-2" alt="...">
+				<strong class="mr-auto">Bootstrap</strong>
+				<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="toast-body">
+				Congrats! Your listing is now live!
+			</div>
+		</div>
+	</div>
+
+	<script src="node_modules\jquery\dist\jquery.min.js" charset="utf-8"></script>
+	<script src="node_modules\popper.js\dist\umd\popper.min.js" charset="utf-8"></script>
+	<script src="node_modules\bootstrap\dist\js\bootstrap.min.js" charset="utf-8"></script>
+	<script src="js/main.min.js"></script>
 	</body>
 </html>

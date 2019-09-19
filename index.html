@@ -16,10 +16,10 @@
     				<a class="nav-link" href="#">Listings</a>
   				</li>
   				<li class="nav-item">
-    				<button type="button" name="login" class="btn btn-outline-light ml-1" id="loginBtn">LOGIN</button>
+    				<button type="button" name="login" data-toggle="modal" data-target="#loginModal" class="btn btn-outline-light ml-1" id="loginModalBtn">LOGIN</button>
   				</li>
   				<li class="nav-item">
-    				<button type="button" name="register" class="btn btn-outline-light" id="registerBtn">REGISTER</button>
+    				<button type="button" name="register" data-toggle="modal" data-target="#registerModal" class="btn btn-outline-light" id="registerModalBtn">REGISTER</button>
   				</li>
 			</ul>
 			<div class="container d-flex justify-content-between">
@@ -28,54 +28,76 @@
 			<button type="button" name="logout" class="btn btn-outline-light d-none" id="logoutBtn">LOGOUT</button>
 		</div>
 
-		<div class="modal fade" id="registerModal" tabindex="-1" role="dialog">
-			<h2>Register A User</h2>
-			<form>
-				<div class="form-group">
-					<label for="registerName">Name</label>
-					<input type="text" class="form-control validationField" id="registerName" required>
-				</div>
-				<div class="form-group">
-					<label for="registerAddress">Address</label>
-					<input type="text" class="form-control validationField" id="registerAddress" required>
-				</div>
-				<div class="form-group">
-					<label for="registerUsername">Username</label>
-					<input type="text" class="form-control validationField" id="registerUsername" required>
-				</div>
-				<div class="form-group">
-					<label for="registerPassword">Password</label>
-					<input type="password" class="form-control validationField" id="registerPassword" required>
-				</div>
-				<div class="form-group">
-					<label for="registerConfirmPassword">Confirm Password</label>
-					<input type="password" class="form-control validationField" id="registerConfirmPassword" required>
-				</div>
-				<div class="form-group">
-					<label for="registerEmail">Email</label>
-					<input type="email" class="form-control validationField" id="registerEmail" required>
-				</div>
-				<div class="form-group">
-					<label for="registerDOB">Date of Birth</label>
-					<input type="date" class="form-control validationField" id="registerDOB" required>
-				</div>
-				<button type="submit" class="btn btn-primary mt-2" id="registerForm">Submit</button>
-			</form>
+		<div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-hidden="true">
+  			<div class="modal-dialog modal-dialog-centered" role="document">
+    			<div class="modal-content">
+      				<div class="modal-header">
+        				<h5 class="modal-title" id="exampleModalLabel">Login</h5>
+        				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          					<span aria-hidden="true">&times;</span>
+        				</button>
+      				</div>
+      				<div class="modal-body">
+						<form>
+						<div class="form-group">
+							<label for="registerName">Name</label>
+							<input type="text" class="form-control validationField" id="registerName" required>
+						</div>
+						<div class="form-group">
+							<label for="registerAddress">Address</label>
+							<input type="text" class="form-control validationField" id="registerAddress" required>
+						</div>
+						<div class="form-group">
+							<label for="registerUsername">Username</label>
+							<input type="text" class="form-control validationField" id="registerUsername" required>
+						</div>
+						<div class="form-group">
+							<label for="registerPassword">Password</label>
+							<input type="password" class="form-control validationField" id="registerPassword" required>
+						</div>
+						<div class="form-group">
+							<label for="registerConfirmPassword">Confirm Password</label>
+							<input type="password" class="form-control validationField" id="registerConfirmPassword" required>
+						</div>
+						<div class="form-group">
+							<label for="registerEmail">Email</label>
+							<input type="email" class="form-control validationField" id="registerEmail" required>
+						</div>
+						<div class="form-group">
+							<label for="registerDOB">Date of Birth</label>
+							<input type="date" class="form-control validationField" id="registerDOB" required>
+						</div>
+						<button type="submit" class="btn btn-primary mt-2" id="registerForm">Register</button>
+					</form>
+      				</div>
+    			</div>
+  			</div>
 		</div>
 
-		<div class="modal fade" id="loginModal" tabindex="-1" role="dialog">
-			<h2>Login</h2>
-			<form id="loginForm">
-				<div class="form-group">
-					<label for="loginUsername">Username</label>
-					<input type="text" class="form-control" id="loginUsername">
-				</div>
-				<div class="form-group">
-					<label for="loginPassword">Password</label>
-					<input type="password" class="form-control" id="loginPassword">
-				</div>
-				<button type="submit" class="btn btn-primary">Login</button>
-			</form>
+		<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-hidden="true">
+  			<div class="modal-dialog modal-dialog-centered" role="document">
+    			<div class="modal-content">
+      				<div class="modal-header">
+        				<h5 class="modal-title" id="exampleModalLabel">Login</h5>
+        				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          					<span aria-hidden="true">&times;</span>
+        				</button>
+      				</div>
+      				<div class="modal-body">
+						<form>
+							<div class="form-group">
+								<label for="loginUsername">Username</label>
+								<input type="text" class="form-control" id="loginUsername">
+							</div>
+							<div class="form-group">
+								<label for="loginPassword">Password</label>
+								<input type="password" class="form-control" id="loginPassword">
+							</div>
+							<button type="submit" class="btn btn-primary" id="loginBtn">Login</button>
+						</form>
+      				</div>
+    			</div>
+  			</div>
 		</div>
 
 		<script src="node_modules\jquery\dist\jquery.min.js" charset="utf-8"></script>

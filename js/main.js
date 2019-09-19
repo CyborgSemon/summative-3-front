@@ -260,7 +260,6 @@ $(`#productList`).on(`click`, `.removeBtn`, ()=> {
     });
 });
 
-$(`#loginBtn`).on(`click`, ()=> {
-	event.preventDefault();
-	
+$(`#loginBtn`).click(()=> {
+
 });

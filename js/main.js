@@ -3,7 +3,12 @@ let mapsKey;
 
 $(document).ready(function(){
 	console.log(sessionStorage);
-	$(`#registerModal`).hide();
+	if(sessionStorage[`username`]){
+		console.log(`you are logged in`);
+    	$(`#loginModalBtn`).hide();
+		$(`#registerModalBtn`).hide();
+    	$(`#logoutBtn`).removeClass(`d-none`);
+	}
 });
 
 $.ajax({
@@ -162,13 +167,15 @@ $(`#loginForm`).submit(()=> {
 			},
 			success: (result)=> {
                 console.log(result);
-				$(`#loginUsername`).val(null);
-				$(`#loginPassword`).val(null);
 				sessionStorage.userId = result._id;
 				sessionStorage.username = result.username;
 				sessionStorage.name = result.name;
 				sessionStorage.email = result.email;
 				sessionStorage.address = result.address;
+				$(`#loginModal`).modal(`hide`);
+				$(`#registerModalBtn`).addClass(`d-none`);
+				$(`#loginModalBtn`).addClass(`d-none`);
+				$(`#logoutBtn`).removeClass(`d-none`);
 			}
 		});
 	} else {
@@ -178,6 +185,9 @@ $(`#loginForm`).submit(()=> {
 
 $(`#logoutBtn`).click(()=> {
 	sessionStorage.clear();
+	$(`#logoutBtn`).addClass(`d-none`);
+	$(`#registerModalBtn`).removeClass(`d-none`);
+	$(`#loginModalBtn`).removeClass(`d-none`);
 });
 
 $(`#addComment`).click(()=> {
@@ -258,8 +268,4 @@ $(`#productList`).on(`click`, `.removeBtn`, ()=> {
             console.log(`something went wrong deleting the product`);
         }
     });
-});
-
-$(`#loginBtn`).click(()=> {
-
 });

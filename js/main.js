@@ -5,9 +5,10 @@ $(document).ready(function(){
 	console.log(sessionStorage);
 	if(sessionStorage[`username`]){
 		console.log(`you are logged in`);
-    	$(`#loginModalBtn`).hide();
-		$(`#registerModalBtn`).hide();
+		$(`#registerModalBtn`).addClass(`d-none`);
+		$(`#loginModalBtn`).addClass(`d-none`);
     	$(`#logoutBtn`).removeClass(`d-none`);
+		$(`#addAListing`).removeClass(`d-none`);
 	}
 });
 
@@ -118,33 +119,56 @@ $(`#listingForm`).click(() => {
     } else if (listingPrice.length === 0) {
         console.log(`listing price needs an input`);
     } else {
-        let fd = new FormData();
-        const file = $(`#listingImageFile`)[0].files[0];
-        fd.append(`filePath`, file);
-        fd.append(`originalName`, file.name);
-        fd.append(`title`, listingTitle);
-        fd.append(`description`, listingDescription);
-        fd.append(`price`, listingPrice);
+        // let fd = new FormData();
+        // const file = $(`#listingImageFile`)[0].files[0];
+        // fd.append(`filePath`, file);
+        // fd.append(`originalName`, file.name);
+        // fd.append(`title`, listingTitle);
+        // fd.append(`description`, listingDescription);
+        // fd.append(`price`, listingPrice);
+		//
+        // console.log(fd);
 
-        console.log(fd);
+        // $.ajax({
+        //     url: `${url}/newListing`,
+        //     method: `POST`,
+        //     data: fd,
+        //     contentType: false,
+        //     processData: false,
+        //     success: (data)=> {
+        //         console.log(`successful`);
+		// 		$(`#listingTitle`).val(null);
+		// 	    $(`#listingDescription`).val(null);
+		// 	    $(`#listingPrice`).val(null);
+        //     },
+        //     error: (err)=> {
+        //         console.log(err);
+        //         console.log(`did not work`);
+        //     }
+        // });
 
-        $.ajax({
-            url: `${url}/newListing`,
-            method: `POST`,
-            data: fd,
-            contentType: false,
-            processData: false,
-            success: (data)=> {
-                console.log(`successful`);
+		$.ajax({
+			url: `${url}/newListing`,
+			method: `POST`,
+			data: {
+				title: listingTitle,
+				description: listingDescription,
+				price: listingPrice,
+				filePath: $(`#fileURL`).val()
+			},
+			success: (data)=> {
+				console.log(`successful`);
 				$(`#listingTitle`).val(null);
-			    $(`#listingDescription`).val(null);
-			    $(`#listingPrice`).val(null);
-            },
-            error: (err)=> {
-                console.log(err);
-                console.log(`did not work`);
-            }
-        });
+				$(`#listingDescription`).val(null);
+				$(`#listingPrice`).val(null);
+				$(`#listingModal`).modal(`hide`);
+				$(`.toastListing`).removeClass(`d-none`);
+			},
+			error: (err)=> {
+				console.log(err);
+		        console.log(`did not work`);
+			}
+		});
     }
 });
 
@@ -176,6 +200,7 @@ $(`#loginForm`).submit(()=> {
 				$(`#registerModalBtn`).addClass(`d-none`);
 				$(`#loginModalBtn`).addClass(`d-none`);
 				$(`#logoutBtn`).removeClass(`d-none`);
+				$(`#addAListing`).removeClass(`d-none`);
 			}
 		});
 	} else {
@@ -186,6 +211,7 @@ $(`#loginForm`).submit(()=> {
 $(`#logoutBtn`).click(()=> {
 	sessionStorage.clear();
 	$(`#logoutBtn`).addClass(`d-none`);
+	$(`#addAListing`).addClass(`d-none`);
 	$(`#registerModalBtn`).removeClass(`d-none`);
 	$(`#loginModalBtn`).removeClass(`d-none`);
 });

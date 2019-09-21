@@ -119,6 +119,9 @@ $(`#listingForm`).click(() => {
     } else if (listingPrice.length === 0) {
         console.log(`listing price needs an input`);
     } else {
+
+		console.log(`posted`);
+		$('#toastListing').toast('show');
         // let fd = new FormData();
         // const file = $(`#listingImageFile`)[0].files[0];
         // fd.append(`filePath`, file);
@@ -147,28 +150,28 @@ $(`#listingForm`).click(() => {
         //     }
         // });
 
-		$.ajax({
-			url: `${url}/newListing`,
-			method: `POST`,
-			data: {
-				title: listingTitle,
-				description: listingDescription,
-				price: listingPrice,
-				filePath: $(`#fileURL`).val()
-			},
-			success: (data)=> {
-				console.log(`successful`);
-				$(`#listingTitle`).val(null);
-				$(`#listingDescription`).val(null);
-				$(`#listingPrice`).val(null);
-				$(`#listingModal`).modal(`hide`);
-				$(`.toastListing`).removeClass(`d-none`);
-			},
-			error: (err)=> {
-				console.log(err);
-		        console.log(`did not work`);
-			}
-		});
+		// $.ajax({
+		// 	url: `${url}/newListing`,
+		// 	method: `POST`,
+		// 	data: {
+		// 		title: listingTitle,
+		// 		description: listingDescription,
+		// 		price: listingPrice,
+		// 		filePath: $(`#fileURL`).val()
+		// 	},
+		// 	success: (data)=> {
+		// 		console.log(`successful`);
+		// 		$(`#listingTitle`).val(null);
+		// 		$(`#listingDescription`).val(null);
+		// 		$(`#listingPrice`).val(null);
+		// 		$(`#listingModal`).modal(`hide`);
+		// 		$(`.toastListing`).removeClass(`d-none`);
+		// 	},
+		// 	error: (err)=> {
+		// 		console.log(err);
+		//         console.log(`did not work`);
+		// 	}
+		// });
     }
 });
 

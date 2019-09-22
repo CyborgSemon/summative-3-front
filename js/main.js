@@ -114,7 +114,7 @@ getListingsData = ()=> {
                 //     </div>`;
                 // // }
                 // listingCard +=`</li>`;
-                `<div class="col-12 col-sm-6 col-md-4 mb-3 mt-3 text-center"`;
+                `<div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3 mt-3 text-center"`;
                 listingCard += `<div class="card h-100 border-dark" >`;
                 listingCard += `<div class="card-body">`;
                 listingCard += `<img src="" class="card-img-top" alt="">`;
@@ -124,10 +124,21 @@ getListingsData = ()=> {
                 <div class="btn btn-primary">Edit</div>
                 </div>`;
                 $(`#listingList`).append(listingCard);
+                $(`#listingPageList`).append(listingCard);
             });
         }
     });
 };
+
+$(`#listingsPageBtn`).click(() => {
+    $(`#homeContainer`).hide();
+    $(`#listingsPage`).removeClass(`d-none`);
+});
+
+$(`#homeBtn`).click(() => {
+    $(`#homeContainer`).show();
+    $(`#listingsPage`).addClass(`d-none`);
+});
 
 $(`#listingForm`).click(() => {
     event.preventDefault();

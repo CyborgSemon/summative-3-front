@@ -167,9 +167,13 @@ const getHome = ()=> {
 		dataType: `json`,
 		success: (data)=> {
 			console.log(data);
-			$(`#featuredListing`).html(`<div class="card mb-3" style="width: 70%;">
-											<div class="row no-gutters">
-												<div class="col-md-4" style="background-image: url('${url}/${data[0].filePath.replace(/\\/g, "/")}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+			$(`#featuredListing`).html(`<div class="container">
+											<div class="row">
+												<h3 class="text-center">Featured Listing</h3>
+											</div>
+											<div class="card mb-3" style="width: 100%;">
+												<div class="row no-gutters">
+													<div class="col-md-4" style="background-image: url('${url}/${data[0].filePath.replace(/\\/g, "/")}'); background-size: cover; background-position: center; background-repeat: no-repeat; height: 300px;">
 												</div>
 												<div class="col-md-8">
 													<div class="card-body" style="max-height: 100%;">
@@ -181,6 +185,7 @@ const getHome = ()=> {
 															</div>
 															<div class="col">
 																<button class="btn btn-secondary">Learn More</button>
+															</div>
 															</div>
 														</div>
 													</div>

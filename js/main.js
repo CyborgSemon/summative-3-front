@@ -135,17 +135,26 @@ const getListingsData = ()=> {
             console.log(data);
             $(`#listingList`).empty();
             data.map((listing)=> {
-                let listingCard = `<li class="list-group-item d-flex justify-content-between align-items-center listingItem" data-listingId="${listing._id}">
-                <span class="listingName">${listing.title}</span>`;
-                // if (sessionStorage.uploaderId) {
-                    listingCard += `<div>
-                    <button class="btn btn-info editBtn">Edit</button>
-                    <button class="btn btn-danger removeBtn">Remove</button>
-                    </div>`;
-                // }
-                listingCard +=`</li>`;
-
+                let listingCard = `<div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3 mt-3 text-center"`;
+                listingCard += `<div class="card h-100 border-dark" >`;
+                listingCard += `<div class="card-body">`;
+                listingCard += `<img src="" class="card-img-top" alt="">`;
+                listingCard += `<h5 class="card-title">${listing.title}</h5>`;
+                listingCard += `<div class="d-flex justify-content-between">`;
+                listingCard += `<span>$${listing.price}</span>`;
+                listingCard += `<div class="btn btn-primary">Edit</div>`;
+                listingCard += `</div>`;
                 $(`#listingList`).append(listingCard);
+                $(`#listingPageList`).append(listingCard);
+				// `<li class="list-group-item d-flex justify-content-between align-items-center listingItem" data-listingId="${listing._id}">
+                // <span class="listingName">${listing.title}</span>`;
+                // // if (sessionStorage.uploaderId) {
+                //     listingCard += `<div>
+                //     <button class="btn btn-info editBtn">Edit</button>
+                //     <button class="btn btn-danger removeBtn">Remove</button>
+                //     </div>`;
+                // // }
+                // listingCard +=`</li>`;
             });
         }
     });
@@ -165,6 +174,15 @@ const getHome = ()=> {
 		}
 	});
 };
+// $(`#listingsPageBtn`).click(() => {
+//     $(`#homeContainer`).hide();
+//     $(`#listingsPage`).removeClass(`d-none`);
+// });
+//
+// $(`#homeBtn`).click(() => {
+//     $(`#homeContainer`).show();
+//     $(`#listingsPage`).addClass(`d-none`);
+// });
 
 $(`#listingForm`).click(() => {
 	event.preventDefault();

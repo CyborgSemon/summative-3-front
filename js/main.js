@@ -135,10 +135,10 @@ const getListingsData = ()=> {
             console.log(data);
             $(`#listingList`).empty();
             data.map((listing)=> {
-                let listingCard = `<div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3 mt-3 text-center"`;
+                let listingCard = `<div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3 mt-3 text-center">`;
                 listingCard += `<div class="card h-100 border-dark" >`;
                 listingCard += `<div class="card-body">`;
-                listingCard += `<img src="" class="card-img-top" alt="">`;
+                listingCard += `<img src="${url}/${listing.filePath.replace(/\\/g, "/")}" class="card-img-top" alt="">`;
                 listingCard += `<h5 class="card-title">${listing.title}</h5>`;
                 listingCard += `<div class="d-flex justify-content-between">`;
                 listingCard += `<span>$${listing.price}</span>`;
@@ -166,12 +166,11 @@ const getHome = ()=> {
 		type: `GET`,
 		dataType: `json`,
 		success: (data)=> {
-			console.log(data);
 			$(`#featuredListing`).html(`<div class="container">
 											<div class="row">
 												<h3 class="text-center">Featured Listing</h3>
 											</div>
-											<div class="card mb-3" style="width: 100%;">
+											<div class="card mb-3 border-dark" style="width: 100%;">
 												<div class="row no-gutters">
 													<div class="col-md-4" style="background-image: url('${url}/${data[0].filePath.replace(/\\/g, "/")}'); background-size: cover; background-position: center; background-repeat: no-repeat; height: 300px;">
 												</div>
@@ -184,7 +183,7 @@ const getHome = ()=> {
 																<p class="card-text">$${data[0].price}</p>
 															</div>
 															<div class="col">
-																<button class="btn btn-secondary">Learn More</button>
+																<button class="btn btn-secondary viewBtn data-id=${data[0]._id}">Learn More</button>
 															</div>
 															</div>
 														</div>
@@ -192,9 +191,29 @@ const getHome = ()=> {
 												</div>
 											</div>
 										</div>`);
+
 			data.map((item, i)=> {
 				if (i > 0) {
+					let homeListings = ``;
+					homeListings += `<div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3 mt-3 text-center">`;
+	                	homeListings += `<div class="card h-100 border-dark">`;
+	                		homeListings += `<div class="card-body">`;
+	                			homeListings += `<div class="img-top" style="background-image: url('${url}/${data[i].filePath.replace(/\\/g, "/")}'); background-size: cover; background-position: center; background-repeat: no-repeat; height: 200px;">`;
+	                			homeListings += `<h5 class="card-title">${data[i].title}</h5>`;
+	                			homeListings += `<div class="d-flex justify-content-between">`;
+	                				homeListings += `<span>$${data[i].price}</span>`;
+									if(sessionStorage.userId == data[i].uploaderId){
+										homeListings += `<div class="btn btn-primary editBtn">Edit</div>`;
+									}else {
+										homeListings += `<div class="btn btn-primary viewBtn data-id="${data[i]._id}">View</div>`;
+									}
+	                			homeListings += `</div>`;
+							homeListings += `</div>`;
+						homeListings += `</div>`;
+					homeListings += `</div>`;
 
+				$(`#listingList`).append(homeListings);
+				// $(`#listingsPage`).append(homeListings);
 				}
 			});
 		},
@@ -204,15 +223,17 @@ const getHome = ()=> {
 		}
 	});
 };
-// $(`#listingsPageBtn`).click(() => {
-//     $(`#homeContainer`).hide();
-//     $(`#listingsPage`).removeClass(`d-none`);
-// });
-//
-// $(`#homeBtn`).click(() => {
-//     $(`#homeContainer`).show();
-//     $(`#listingsPage`).addClass(`d-none`);
-// });
+$(`#listingsPageBtn`).click(() => {
+    $(`#homeContainer`).hide();
+    $(`#listingsPage`).removeClass(`d-none`);
+	getListingsData();
+});
+
+$(`#homeBtn`).click(() => {
+    $(`#homeContainer`).show();
+    $(`#listingsPage`).addClass(`d-none`);
+	getHome();
+});
 
 $(`#listingForm`).click(() => {
 	event.preventDefault();

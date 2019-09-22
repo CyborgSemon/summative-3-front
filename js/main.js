@@ -151,9 +151,24 @@ const getListingsData = ()=> {
     });
 };
 
+const getHome = ()=> {
+	$.ajax({
+		url: `${url}/home`,
+		type: `GET`,
+		dataType: `json`,
+		success: (data)=> {
+			console.log(data);
+		},
+		error: (err)=> {
+			console.log(err);
+			console.log(`could not get the home page listings`);
+		}
+	});
+};
+
 $(`#listingForm`).click(() => {
 	event.preventDefault();
-	if (sessionStorage.length > 0 && sessionStorage.id) {
+	if (sessionStorage.length > 0 && sessionStorage.userId) {
 
 		let passFail = true;
 		const listingTitle = $(`#listingTitle`).val();
@@ -200,7 +215,7 @@ $(`#listingForm`).click(() => {
 			fd.append(`title`, listingTitle);
 			fd.append(`description`, listingDescription);
 			fd.append(`price`, listingPrice);
-			fd.append(`userId`, sessionStorage.id);
+			fd.append(`userId`, sessionStorage.userId);
 
 			$.ajax({
 				url: `${url}/newListing`,
@@ -291,7 +306,7 @@ $(`#logoutBtn`).click(()=> {
 
 $(`#addComment`).click(()=> {
 	event.preventDefault();
-	if (sessionStorage.length > 0 && sessionStorage.id) {
+	if (sessionStorage.length > 0 && sessionStorage.userId) {
 		let passFail = true;
 		let userComment = $(`#userComment`).val();
 		if (userComment.length === 0) {
@@ -314,7 +329,7 @@ $(`#addComment`).click(()=> {
 						reply: false,
 						replyId: null
 					},
-					commentUserId: sessionStorage.id,
+					commentUserId: sessionStorage.userId,
 					listingId: $(`#listingDiv`).attr(`data-listingId`)
 				},
 				success: (data)=> {

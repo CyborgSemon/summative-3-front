@@ -24,7 +24,7 @@ $.ajax({
     success: (result)=> {
         url = `${result.SERVER_URL}:${result.SERVER_PORT}`;
         mapsKey = result.GOOGLE_MAPS_KEY;
-        getListingsData();
+        getHome();
     }
 });
 
@@ -167,6 +167,31 @@ const getHome = ()=> {
 		dataType: `json`,
 		success: (data)=> {
 			console.log(data);
+			$(`#featuredListing`).html(`<div class="card mb-3" style="width: 70%;">
+											<div class="row no-gutters">
+												<div class="col-md-4" style="background-image: url('${url}/${data[0].filePath.replace(/\\/g, "/")}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+												</div>
+												<div class="col-md-8">
+													<div class="card-body" style="max-height: 100%;">
+														<h5 class="card-title">${data[0].title}</h5>
+														<p class="card-text">${data[0].description}</p>
+														<div class="row">
+															<div class="col">
+																<p class="card-text">$${data[0].price}</p>
+															</div>
+															<div class="col">
+																<button class="btn btn-secondary">Learn More</button>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>`);
+			data.map((item, i)=> {
+				if (i > 0) {
+
+				}
+			});
 		},
 		error: (err)=> {
 			console.log(err);
@@ -228,6 +253,7 @@ $(`#listingForm`).click(() => {
 		if (passFail) {
 			let fd = new FormData();
 			const file = $(`#listingImageFile`)[0].files[0];
+			console.log(file);
 			fd.append(`filePath`, file);
 			fd.append(`originalName`, file.name);
 			fd.append(`title`, listingTitle);

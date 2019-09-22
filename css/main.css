@@ -7,4 +7,8 @@
 .invalid-feedback {
   display: none; }
 
+li a {
+  text-decoration: none;
+  color: #FFFFFF; }
+
 /*# sourceMappingURL=main.css.map */

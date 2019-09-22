@@ -121,7 +121,8 @@ $(`#listingForm`).click(() => {
     } else {
 
 		console.log(`posted`);
-		$('#toastListing').toast('show');
+		$(`#toastListing`).toast(`show`);
+		$(`#listingModal`).modal(`hide`);
         // let fd = new FormData();
         // const file = $(`#listingImageFile`)[0].files[0];
         // fd.append(`filePath`, file);

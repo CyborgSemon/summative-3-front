@@ -24,7 +24,7 @@ $.ajax({
     success: (result)=> {
         url = `${result.SERVER_URL}:${result.SERVER_PORT}`;
         mapsKey = result.GOOGLE_MAPS_KEY;
-        getListingsData();
+        getHome();
     }
 });
 
@@ -135,15 +135,19 @@ const getListingsData = ()=> {
             console.log(data);
             $(`#listingList`).empty();
             data.map((listing)=> {
-                let listingCard = `<div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3 mt-3 text-center"`;
-                listingCard += `<div class="card h-100 border-dark" >`;
-                listingCard += `<div class="card-body">`;
-                listingCard += `<img src="" class="card-img-top" alt="">`;
-                listingCard += `<h5 class="card-title">${listing.title}</h5>`;
-                listingCard += `<div class="d-flex justify-content-between">`;
-                listingCard += `<span>$${listing.price}</span>`;
-                listingCard += `<div class="btn btn-primary">Edit</div>`;
-                listingCard += `</div>`;
+				let listingCard = ``;
+				 listingCard += `<div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3 mt-3 text-center">`;
+					listingCard += `<div class="card h-100 border-dark">`;
+						listingCard += `<div class="card-body">`;
+							listingCard += `<div class="img-top" style="background-image: url('${url}/${listing.filePath.replace(/\\/g, "/")}'); background-size: cover; background-position: center; background-repeat: no-repeat; height: 200px;">`;
+							listingCard += `</div>`;
+							listingCard += `<h5 class="card-title pt-2">${listing.title}</h5>`;
+							listingCard += `<div class="d-flex justify-content-between">`;
+								listingCard += `<span>$${listing.price}</span>`;
+								listingCard += `<div class="btn btn-primary viewBtn data-id="${listing._id}">View</div>`;
+						listingCard += `</div>`;
+					listingCard += `</div>`;
+				listingCard += `</div>`;
                 $(`#listingList`).append(listingCard);
                 $(`#listingPageList`).append(listingCard);
 				// `<li class="list-group-item d-flex justify-content-between align-items-center listingItem" data-listingId="${listing._id}">
@@ -160,15 +164,77 @@ const getListingsData = ()=> {
     });
 };
 
-// $(`#listingsPageBtn`).click(() => {
-//     $(`#homeContainer`).hide();
-//     $(`#listingsPage`).removeClass(`d-none`);
-// });
-//
-// $(`#homeBtn`).click(() => {
-//     $(`#homeContainer`).show();
-//     $(`#listingsPage`).addClass(`d-none`);
-// });
+const getHome = ()=> {
+	$.ajax({
+		url: `${url}/home`,
+		type: `GET`,
+		dataType: `json`,
+		success: (data)=> {
+			$(`#featuredListing`).html(`<div class="container">
+											<div class="row">
+												<h3 class="text-center">Featured Listing</h3>
+											</div>
+											<div class="card mb-3 border-dark" style="width: 100%;">
+												<div class="row no-gutters">
+													<div class="col-md-4" style="background-image: url('${url}/${data[0].filePath.replace(/\\/g, "/")}'); background-size: cover; background-position: center; background-repeat: no-repeat; height: 300px;">
+												</div>
+												<div class="col-md-8">
+													<div class="card-body" style="max-height: 100%; width: 600px; margin: 0 auto;">
+														<h5 class="card-title">${data[0].title}</h5>
+														<p class="card-text">${data[0].description}</p>
+														<div class="row">
+															<div class="col">
+																<p class="card-text">$${data[0].price}</p>
+															</div>
+															<div class="col d-flex justify-content-end">
+																<button class="btn btn-secondary viewBtn data-id=${data[0]._id}">Learn More</button>
+															</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>`);
+
+			$(`#listingList`).html(null);
+			data.map((item, i)=> {
+				if (i > 0) {
+					let homeListings = ``;
+					homeListings += `<div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3 mt-3 text-center">`;
+	                	homeListings += `<div class="card h-100 border-dark">`;
+	                		homeListings += `<div class="card-body">`;
+	                			homeListings += `<div class="img-top" style="background-image: url('${url}/${data[i].filePath.replace(/\\/g, "/")}'); background-size: cover; background-position: center; background-repeat: no-repeat; height: 200px;">`;
+								homeListings += `</div>`;
+	                			homeListings += `<h5 class="card-title pt-2">${data[i].title}</h5>`;
+	                			homeListings += `<div class="d-flex justify-content-between">`;
+	                				homeListings += `<span>$${data[i].price}</span>`;
+									homeListings += `<div class="btn btn-primary viewBtn data-id="${data[i]._id}">View</div>`;
+							homeListings += `</div>`;
+						homeListings += `</div>`;
+					homeListings += `</div>`;
+
+				$(`#listingList`).append(homeListings);
+				}
+			});
+		},
+		error: (err)=> {
+			console.log(err);
+			console.log(`could not get the home page listings`);
+		}
+	});
+};
+
+$(`#listingsPageBtn`).click(() => {
+    $(`#homeContainer`).hide();
+    $(`#listingsPage`).removeClass(`d-none`);
+	getListingsData();
+});
+
+$(`#homeBtn`).click(() => {
+    $(`#homeContainer`).show();
+    $(`#listingsPage`).addClass(`d-none`);
+	getHome();
+});
 
 $(`#listingForm`).click(() => {
 	event.preventDefault();
@@ -233,8 +299,8 @@ $(`#listingForm`).click(() => {
 				    $(`#listingDescription`).val(null);
 				    $(`#listingPrice`).val(null);
 					$(`#listingImageFile`).val(null);
+					$(`#toastListing`).toast(`show`);
 					$(`#listingModal`).modal(`hide`);
-					$(`.toastListing`).removeClass(`d-none`);
 				},
 				error: (err)=> {
 					console.log(err);

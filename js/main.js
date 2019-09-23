@@ -397,6 +397,9 @@ const refreshView = ()=> {
 				console.log(data);
 				$(`#productPage`).attr(`data-listingId`, data.info._id);
 				$(`#itemTitle`).text(data.info.title);
+				if (sessionStorage.userId == data.info.uploaderId) {
+					$(`#productBtns`).removeClass(`d-none`);
+				}
 				$(`#itemImage`).attr(`style`, `background-image: url('${url}/${data.info.filePath.replace(/\\/g, "/")}')`);
 				$(`#itemPrice`).text(`$${data.info.price}`);
 				$(`#itemDescription`).text(data.info.description);
@@ -560,55 +563,66 @@ const replyFunction = (e)=> {
 	});
 };
 
-// $(`#listingList`).on(`click`, `.editBtn`, ()=> {
-// 	event.preventDefault();
-// 	if (!sessionStorage.userId) {
-// 		alert(`401, permission denied`);
-// 		return;
-// 	}
-// 	$.ajax({
-// 		url: `${url}/listing/${id}`,
-// 		type: `post`,
-// 		data: {
-// 			userId: sessionStorage.userId
-// 		},
-// 		dataType: `json`,
-// 		success:(product)=> {
-// 			console.log(product);
-// 			$(`#listingTitle`).val(product.title);
-// 			$(`#listingDescription`).val(product.description);
-// 			$(`#listingPrice`).val(product.price);
-// 			$(`#addProductButton`).text(`Edit Listing`).addClass(`btn-warning`);
-// 			$(`#heading`).text(`Edit Product`);
-// 			editing = true;
-// 		},
-// 		error:(err)=> {
-// 			console.log(err);
-// 			console.log(`something went wrong with getting the single product`);
-// 		}
-// 	});
-// });
+$(`#listingList`).on(`click`, `.editBtn`, ()=> {
+	event.preventDefault();
+	if (!sessionStorage.userId) {
+		alert(`401, permission denied`);
+		return;
+	}
+	$.ajax({
+		url: `${url}/listing/${id}`,
+		type: `post`,
+		data: {
+			userId: sessionStorage.userId
+		},
+		dataType: `json`,
+		success:(product)=> {
+			console.log(product);
+			$(`#listingTitle`).val(product.title);
+			$(`#listingDescription`).val(product.description);
+			$(`#listingPrice`).val(product.price);
+			$(`#addProductButton`).text(`Edit Listing`).addClass(`btn-warning`);
+			$(`#heading`).text(`Edit Product`);
+			editing = true;
+		},
+		error:(err)=> {
+			console.log(err);
+			console.log(`something went wrong with getting the single product`);
+		}
+	});
+});
 
-// $(`#productList`).on(`click`, `.removeBtn`, ()=> {
-// 	event.preventDefault();
-// 	if (!sessionStorage.userId) {
-// 		alert(`401, permission denied`);
-// 		return;
-// 	}
-// 	// const id = $(this).parent().parent().data(`id`);
-// 	// const li = $(this).parent().parent();
-// 	$.ajax({
-// 		url: `${url}/listing/${id}`,
-// 		type: `DELETE`,
-// 		success:(result)=> {
-// 			li.remove();
-// 		},
-// 		error:(err)=> {
-// 			console.log(err);
-// 			console.log(`something went wrong deleting the product`);
-// 		}
-// 	});
-// });
+$(`#removeBtn`).click(()=> {
+	if (!sessionStorage.userId) {
+		alert(`401, permission denied`);
+		return;
+	}
+	// const id = $(this).parent().parent().data(`id`);
+	// const li = $(this).parent().parent();
+	$.ajax({
+		url: `${url}/deleteListing`,
+		type: `DELETE`,
+		data: {
+			id: $(`#productPage`).attr(`data-listingId`),
+			userId: sessionStorage.userId
+		},
+		success:(result)=> {
+			if (result == `deleted`) {
+				$(`#homeContainer`).show();
+				$(`#listingsPage`).addClass(`d-none`);
+				$(`#productPage`).addClass(`d-none`);
+				$(`#productPage`).attr(`data-listingId`, null);
+				getHome();
+			} else {
+				console.log(`Failed to delete`);
+			}
+		},
+		error:(err)=> {
+			console.log(err);
+			console.log(`something went wrong deleting the product`);
+		}
+	});
+});
 
 
 /*

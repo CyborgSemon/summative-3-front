@@ -135,15 +135,19 @@ const getListingsData = ()=> {
             console.log(data);
             $(`#listingList`).empty();
             data.map((listing)=> {
-                let listingCard = `<div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3 mt-3 text-center">`;
-                listingCard += `<div class="card h-100 border-dark" >`;
-                listingCard += `<div class="card-body">`;
-                listingCard += `<img src="${url}/${listing.filePath.replace(/\\/g, "/")}" class="card-img-top" alt="">`;
-                listingCard += `<h5 class="card-title">${listing.title}</h5>`;
-                listingCard += `<div class="d-flex justify-content-between">`;
-                listingCard += `<span>$${listing.price}</span>`;
-                listingCard += `<div class="btn btn-primary">Edit</div>`;
-                listingCard += `</div>`;
+				let listingCard = ``;
+				 listingCard += `<div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3 mt-3 text-center">`;
+					listingCard += `<div class="card h-100 border-dark">`;
+						listingCard += `<div class="card-body">`;
+							listingCard += `<div class="img-top" style="background-image: url('${url}/${listing.filePath.replace(/\\/g, "/")}'); background-size: cover; background-position: center; background-repeat: no-repeat; height: 200px;">`;
+							listingCard += `</div>`;
+							listingCard += `<h5 class="card-title pt-2">${listing.title}</h5>`;
+							listingCard += `<div class="d-flex justify-content-between">`;
+								listingCard += `<span>$${listing.price}</span>`;
+								listingCard += `<div class="btn btn-primary viewBtn data-id="${listing._id}">View</div>`;
+						listingCard += `</div>`;
+					listingCard += `</div>`;
+				listingCard += `</div>`;
                 $(`#listingList`).append(listingCard);
                 $(`#listingPageList`).append(listingCard);
 				// `<li class="list-group-item d-flex justify-content-between align-items-center listingItem" data-listingId="${listing._id}">
@@ -175,14 +179,14 @@ const getHome = ()=> {
 													<div class="col-md-4" style="background-image: url('${url}/${data[0].filePath.replace(/\\/g, "/")}'); background-size: cover; background-position: center; background-repeat: no-repeat; height: 300px;">
 												</div>
 												<div class="col-md-8">
-													<div class="card-body" style="max-height: 100%;">
+													<div class="card-body" style="max-height: 100%; width: 600px; margin: 0 auto;">
 														<h5 class="card-title">${data[0].title}</h5>
 														<p class="card-text">${data[0].description}</p>
 														<div class="row">
 															<div class="col">
 																<p class="card-text">$${data[0].price}</p>
 															</div>
-															<div class="col">
+															<div class="col d-flex justify-content-end">
 																<button class="btn btn-secondary viewBtn data-id=${data[0]._id}">Learn More</button>
 															</div>
 															</div>
@@ -192,6 +196,7 @@ const getHome = ()=> {
 											</div>
 										</div>`);
 
+			$(`#listingList`).html(null);
 			data.map((item, i)=> {
 				if (i > 0) {
 					let homeListings = ``;
@@ -199,15 +204,11 @@ const getHome = ()=> {
 	                	homeListings += `<div class="card h-100 border-dark">`;
 	                		homeListings += `<div class="card-body">`;
 	                			homeListings += `<div class="img-top" style="background-image: url('${url}/${data[i].filePath.replace(/\\/g, "/")}'); background-size: cover; background-position: center; background-repeat: no-repeat; height: 200px;">`;
-	                			homeListings += `<h5 class="card-title">${data[i].title}</h5>`;
+								homeListings += `</div>`;
+	                			homeListings += `<h5 class="card-title pt-2">${data[i].title}</h5>`;
 	                			homeListings += `<div class="d-flex justify-content-between">`;
 	                				homeListings += `<span>$${data[i].price}</span>`;
-									if(sessionStorage.userId == data[i].uploaderId){
-										homeListings += `<div class="btn btn-primary editBtn">Edit</div>`;
-									}else {
-										homeListings += `<div class="btn btn-primary viewBtn data-id="${data[i]._id}">View</div>`;
-									}
-	                			homeListings += `</div>`;
+									homeListings += `<div class="btn btn-primary viewBtn data-id="${data[i]._id}">View</div>`;
 							homeListings += `</div>`;
 						homeListings += `</div>`;
 					homeListings += `</div>`;

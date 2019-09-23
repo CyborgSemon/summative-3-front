@@ -10,6 +10,9 @@
 #productPage {
   margin-top: 24px; }
 
+#itemDescription {
+  padding-top: 12px; }
+
 .itemInfo {
   width: 50%;
   display: flex;

@@ -164,7 +164,7 @@ const getListingsData = ()=> {
 //     $(`#homeContainer`).hide();
 //     $(`#listingsPage`).removeClass(`d-none`);
 // });
-// 
+//
 // $(`#homeBtn`).click(() => {
 //     $(`#homeContainer`).show();
 //     $(`#listingsPage`).addClass(`d-none`);
@@ -172,7 +172,7 @@ const getListingsData = ()=> {
 
 $(`#listingForm`).click(() => {
 	event.preventDefault();
-	if (sessionStorage.length > 0 && sessionStorage.id) {
+	if (sessionStorage.length > 0 && sessionStorage.userId) {
 
 		let passFail = true;
 		const listingTitle = $(`#listingTitle`).val();
@@ -219,7 +219,7 @@ $(`#listingForm`).click(() => {
 			fd.append(`title`, listingTitle);
 			fd.append(`description`, listingDescription);
 			fd.append(`price`, listingPrice);
-			fd.append(`userId`, sessionStorage.id);
+			fd.append(`userId`, sessionStorage.userId);
 
 			$.ajax({
 				url: `${url}/newListing`,
@@ -306,51 +306,186 @@ $(`#logoutBtn`).click(()=> {
 	$(`#addAListing`).addClass(`d-none`);
 	$(`#registerModalBtn`).removeClass(`d-none`);
 	$(`#loginModalBtn`).removeClass(`d-none`);
+	$(`.loginActive`).remove();
 });
 
-$(`#addComment`).click(()=> {
-	event.preventDefault();
-	if (sessionStorage.length > 0 && sessionStorage.id) {
+$(`.viewBtn`).click((e)=> {
+	let itemId = $(e.target).attr(`data-id`);
+	$(`#itemCommentsParent`).html(null);
+	$.ajax({
+		url: `${url}/product`,
+		type: `POST`,
+		data: {
+			id: itemId
+		},
+		error: (err)=> {
+			console.log(`Cant find listing`);
+			console.log(err);
+		},
+		success: (data)=> {
+			$(`#productPage`).attr(`data-listingId`, data.info._id);
+			$(`#itemTitle`).text(data.info.title);
+			$(`#itemImage`).attr(`style`, `background-image: url('${data.info.filePath}')`);
+			$(`#itemPrice`).text(`$${data.info.price}`);
+			$(`#description`).text(data.info.description);
+			$(`#posterName`).text(data.uploaderName);
+
+			if (sessionStorage.length > 0 && sessionStorage.userId) {
+				$(`#itemCommentsParent`).html(`<form class="loginActive" id="commentForm">
+					<div class="d-flex">
+						<input type="text" class="form-control" id="commentInput" placeholder="Add Question / Comment" required>
+						<button type="submit" class="btn btn-primary">Post</button>
+					</div>
+					<div id="commentValidation" class="invalid-feedback">Comment can not be empty</div>
+				</form>`);
+
+				$(`#commentForm`).submit(()=> {
+					event.preventDefault();
+					if (sessionStorage.length > 0 && sessionStorage.userId) {
+						let passFail = true;
+						let userComment = $(`#commentInput`).val();
+						if (userComment.length === 0) {
+							$(`#commentInput`).addClass(`is-invalid`);
+							$(`#commentValidation`).parent().children().last().show();
+							passFail = false;
+						} else {
+							$(`#commentInput`).removeClass(`is-invalid`);
+							$(`#commentValidation`).parent().children().last().hide();
+						}
+						if (passFail) {
+							$.ajax({
+								url: `${url}/addAComment`,
+								type: `POST`,
+								data: {
+									data: JSON.stringify({
+										listingId: $(`#productPage`).attr(`data-listingId`),
+										commentUsername: sessionStorage.username,
+										commentText: userComment,
+										commentDate: Date.now(),
+										commentUserId: sessionStorage.userId,
+										reply: false,
+										replyUsername: null,
+										replyText: null,
+										replyDate: null,
+										replyUserId: null
+									})
+								},
+								success: (data2)=> {
+									$(`#commentInput`).val(null);
+									$(`#noCommentsMsg`).hide();
+									let appendComment = ``;
+									if (sessionStorage.length > 0 && sessionStorage.userId == data.info.uploaderId) {
+										appendComment += `<div class="comment" data-commentId="${data2._id}"><div class="d-flex justify-content-between"><h5>${data2.commentUsername}</h5><button class="btn btn-primary btn-sm replyBtn loginActive">Reply</button></div><p>${data2.commentText}</p></div>`;
+									} else {
+										appendComment += `<div class="comment"><h5>${data2.commentUsername}</h5><p>${data2.commentText}</p></div>`;
+									}
+
+									$(`#itemComments`).append(appendComment);
+									refreshReply();
+								},
+								error: (err2)=> {
+									console.log(`did not post comment`);
+									console.log(err2);
+								}
+							});
+						} else {
+							console.log(`Invalid text`);
+						}
+					} else {
+						console.log(`You are not logged in`);
+					}
+				});
+			}
+
+			$(`#itemCommentsParent`).append(`<div id="itemComments"></div>`);
+
+			if (data.comments == `No comments found`) {
+				$(`#itemComments`).append(`<h4 id="noCommentsMsg">No comments found.</h4>`);
+			} else {
+				let commentString = ``;
+				data.comments.map((comment)=> {
+					if (sessionStorage.length > 0 && sessionStorage.userId == data.info.uploaderId) {
+						if (comment.commentReply.reply) {
+							commentString += `<div class="comment"><h5>${comment.commentUsername}</h5><p>${comment.commentText}</p>`;
+						} else {
+							commentString += `<div class="comment" data-commentId="${comment._id}"><div class="d-flex justify-content-between"><h5>${comment.commentUsername}</h5><button class="btn btn-primary btn-sm replyBtn loginActive">Reply</button></div><p>${comment.commentText}</p>`;
+						}
+					} else {
+						commentString += `<div class="comment"><h5>${comment.commentUsername}</h5><p>${comment.commentText}</p>`;
+					}
+					if (comment.commentReply.reply) {
+						commentString += `<div class="comment reply"><h5>${comment.commentReply.replyUsername}</h5><p>${comment.commentReply.replyText}</p></div></div>`;
+					} else {
+						commentString += `</div>`;
+					}
+				});
+				$(`#itemComments`).append(commentString);
+			}
+			$(`#homeContainer`).hide();
+			$(`#listingsPage`).hide();
+			$(`#productPage`).removeClass(`d-none`);
+
+			refreshReply();
+		}
+	});
+});
+
+const refreshReply = ()=> {
+	$('.replyBtn').off('click');
+	$('.replyBtn').on('click', replyFunction);
+};
+
+const replyFunction = (e)=> {
+	$(`#replyForm`).remove();
+	let replyId = $(e.target).parent().parent().attr(`data-commentId`);
+	$(e.target).parent().parent().append(`<form id="replyForm" class="loginActive">
+		<div class="d-flex">
+			<input type="text" class="form-control" id="replyInput" placeholder="Reply" required>
+			<button type="submit" class="btn btn-primary">Post</button>
+		</div>
+		<div id="replyValidation" class="invalid-feedback">Comment can not be empty</div>
+	</form>`);
+
+	$(`#replyForm`).submit(()=> {
+		event.preventDefault();
 		let passFail = true;
-		let userComment = $(`#userComment`).val();
+		let userComment = $(`#replyInput`).val();
 		if (userComment.length === 0) {
-			$(`#userComment`).addClass(`is-invalid`);
-			$(`#userComment`).parent().children().last().show();
+			$(`#replyInput`).addClass(`is-invalid`);
+			$(`#replyValidation`).parent().children().last().show();
 			passFail = false;
 		} else {
-			$(`#userComment`).removeClass(`is-invalid`);
-			$(`#userComment`).parent().children().last().hide();
+			$(`#replyInput`).removeClass(`is-invalid`);
+			$(`#replyValidation`).parent().children().last().hide();
 		}
 		if (passFail) {
 			$.ajax({
-				url: `${url}/addAComment`,
-				type: `POST`,
+				url: `${url}/addReply`,
+				type: `PATCH`,
 				data: {
-					commentUsername: sessionStorage.username,
-					commentText: userComment,
-					commentDate: Date.now(),
-					commentReply: {
-						reply: false,
-						replyId: null
-					},
-					commentUserId: sessionStorage.id,
-					listingId: $(`#listingDiv`).attr(`data-listingId`)
-				},
-				success: (data)=> {
-					console.log(`comment posted`);
+					data: JSON.stringify({
+						commentId: replyId,
+						replyUsername: sessionStorage.username,
+						replyText: userComment,
+						replyDate: Date.now(),
+						replyUserId: sessionStorage._id
+					})
 				},
 				error: (err)=> {
+					console.log(`There was an error sending the reply`);
 					console.log(err);
-					console.log(`did not post comment`);
+				},
+				success: (replyData)=> {
+					console.log(`Reply submitted`);
+					let formParent = $(`#replyForm`).parent();
+					$(`#replyForm`).remove();
+					formParent.append(`<div class="comment reply"><h5>${sessionStorage.username}</h5><p>${userComment}</p></div>`);
+					formParent.find('.btn-sm').remove();
 				}
 			});
-		} else {
-			console.log(`Invalid text`);
 		}
-	} else {
-		console.log(`You are not logged in`);
-	}
-});
+	});
+};
 
 // $(`#listingList`).on(`click`, `.editBtn`, ()=> {
 // 	event.preventDefault();

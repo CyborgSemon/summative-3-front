@@ -29,16 +29,86 @@
 				</li>
 			</ul>
 		</div>
-		<div class="container-fluid">
+		<div id="homeContainer" class="container-fluid">
+			<button class="btn btn-primary viewBtn" data-id="5d86df79ba574e079cdf0b66">View</button>
 			<div class="row">
 				<div class="col">
 					<ul id="listingList" class="list-group"></ul>
 				</div>
 			</div>
 		</div>
-		<div id="listingsPage" class="container d-none">
+		<div id="listingsPage" class="container">
 			<div id="listingPageList" class="row">
 
+			</div>
+		</div>
+		<div id="productPage" class="container d-none" data-listingId>
+			<h2 id="itemTitle">This is a product</h2>
+			<div class="itemTop d-flex">
+				<div id="itemImage" style="background-image: url('https://image.shutterstock.com/image-photo/colorful-flower-on-dark-tropical-260nw-721703848.jpg')" class="itemImage"></div>
+				<div class="itemInfo">
+					<h4>Posted by <span id="posterName">NAME</span></h4>
+					<div>
+						<h4 id="itemPrice">$500.00</h4>
+						<button type="button" class="btn btn-primary">Buy!</button>
+					</div>
+				</div>
+			</div>
+			<div class="itemExtra d-flex">
+				<div id="itemDescription">
+					Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+				</div>
+				<div id="itemCommentsParent">
+					<form class="loginActive" id="commentForm">
+						<div class="d-flex">
+							<input type="text" class="form-control" id="commentInput" placeholder="Add Question / Comment" required>
+							<button type="submit" class="btn btn-primary">Post</button>
+						</div>
+						<div id="commentValidation" class="invalid-feedback">Comment can not be empty</div>
+					</form>
+					<div id="itemComments">
+
+					</div>
+					<div class="comment">
+						<div class="d-flex justify-content-between">
+							<h5>Cool User 420</h5>
+							<button class="btn btn-primary btn-sm replyBtn">Reply</button>
+						</div>
+						<p>Is this flower real? I can't tell from the picture.</p>
+						<div class="comment reply">
+							<h5>Cool User 420</h5>
+							<p>Is this flower real? I can't tell from the picture.</p>
+						</div>
+					</div>
+					<div class="comment">
+						<div class="d-flex justify-content-between">
+							<h5>Cool User 420</h5>
+							<button class="btn btn-primary btn-sm replyBtn">Reply</button>
+						</div>
+						<p>Is this flower real? I can't tell from the picture.</p>
+					</div>
+					<div class="comment">
+						<div class="d-flex justify-content-between">
+							<h5>Cool User 420</h5>
+							<button class="btn btn-primary btn-sm replyBtn">Reply</button>
+						</div>
+						<p>Is this flower real? I can't tell from the picture.</p>
+						<form id="replyForm">
+							<div class="d-flex">
+								<input type="text" class="form-control" id="replyInput" placeholder="Reply" required>
+								<button type="submit" class="btn btn-primary">Post</button>
+							</div>
+							<div id="commentValidation" class="invalid-feedback">Comment can not be empty</div>
+						</form>
+					</div>
+					<div class="comment">
+						<div class="d-flex justify-content-between">
+							<h5>Cool User 420</h5>
+							<button class="btn btn-primary btn-sm replyBtn">Reply</button>
+						</div>
+						<p>Is this flower real? I can't tell from the picture.</p>
+					</div>
+				</div>
 			</div>
 		</div>
 
@@ -108,12 +178,12 @@
 						<form id="loginForm">
 							<div class="form-group">
 								<label for="loginUsername">Username</label>
-								<input type="text" class="form-control" id="loginUsername">
+								<input type="text" class="form-control" id="loginUsername" required>
 								<div class="invalid-feedback">Username is not valid</div>
 							</div>
 							<div class="form-group">
 								<label for="loginPassword">Password</label>
-								<input type="password" class="form-control" id="loginPassword">
+								<input type="password" class="form-control" id="loginPassword" required>
 								<div class="invalid-feedback">Password is not valid</div>
 							</div>
 							<button type="submit" class="btn btn-primary">Login</button>
@@ -136,22 +206,22 @@
 						<form enctype="multipart/form-data">
 							<div class="form-group">
 								<label for="listingTitle">Title</label>
-								<input type="text" class="form-control" id="listingTitle">
+								<input type="text" class="form-control" id="listingTitle" required>
 								<div class="invalid-feedback">Title is not valid</div>
 							</div>
 							<div class="form-group">
 								<label for="listingDescription">Description</label>
-								<input type="text" class="form-control" id="listingDescription">
+								<input type="text" class="form-control" id="listingDescription" required>
 								<div class="invalid-feedback">Description is not valid</div>
 							</div>
 							<div class="form-group">
 								<label for="listingPrice">Price</label>
-								<input type="number" class="form-control" id="listingPrice">
+								<input type="number" class="form-control" id="listingPrice" required>
 								<div class="invalid-feedback">Price is not valid</div>
 							</div>
 							<div class="custom-file">
 								<label class="custom-file-label" for="listingImageFile">Upload an Image</label>
-								<input type="file" class="custom-file-input" id="listingImageFile">
+								<input type="file" class="custom-file-input" id="listingImageFile" required>
 								<div class="invalid-feedback">File is not valid</div>
 							</div>
 							<button type="submit" class="btn btn-primary mt-2" id="listingForm">Submit</button>

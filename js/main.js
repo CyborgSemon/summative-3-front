@@ -240,6 +240,10 @@ $(`#homeBtn`).click(() => {
 	getHome();
 });
 
+$(`#addAListing`).click(()=> {
+	$(`#listingModal`).modal(`show`);
+});
+
 $(`#listingForm`).click(() => {
 	event.preventDefault();
 	if (sessionStorage.length > 0 && sessionStorage.userId) {

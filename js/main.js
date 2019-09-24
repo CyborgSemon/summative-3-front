@@ -633,6 +633,13 @@ $(`#editListingForm`).click(()=> {
 				success: (data)=> {
 					console.log(data);
 					console.log(`successful`);
+					$(`#itemTitle`).text(editListingTitle);
+					$(`#itemDescription`).text(editListingDescription);
+					$('#itemPrice').text(editListingPrice);
+					$(`#editListingModal`).modal(`hide`);
+					$(`#editListingTitle`).val(null);
+					$(`#editListingDescription`).val(null);
+					$(`#editListingPrice`).val(null);
 				},
 				error: (err)=> {
 					console.log(err);

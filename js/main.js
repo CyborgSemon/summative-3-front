@@ -173,14 +173,14 @@ const getHome = ()=> {
 		success: (data)=> {
 			$(`#featuredListing`).html(`<div class="container">
 											<div class="row">
-												<h3 class="text-center">Featured Listing</h3>
+												<h3 class="text-center featuredTitle">Featured Listing</h3>
 											</div>
 											<div class="card mb-3 border-dark" style="width: 100%;">
 												<div class="row no-gutters">
 													<div class="col-md-4" style="background-image: url('${url}/${data[0].filePath.replace(/\\/g, "/")}'); background-size: cover; background-position: center; background-repeat: no-repeat; height: 300px;">
 												</div>
 												<div class="col-md-8">
-													<div class="card-body" style="max-height: 100%; width: 600px; margin: 0 auto;">
+													<div class="card-body" style="max-height: 100%; margin: 0 auto;">
 														<h5 class="card-title">${data[0].title}</h5>
 														<p class="card-text">${data[0].description}</p>
 														<div class="row">
@@ -307,7 +307,17 @@ $(`#listingForm`).click(() => {
 				    $(`#listingDescription`).val(null);
 				    $(`#listingPrice`).val(null);
 					$(`#listingImageFile`).val(null);
-					$(`#toastListing`).toast(`show`);
+					$(`#toastNotification`).html(`<div class="toast-header">
+			    		<strong class="mr-auto">Congratulations!</strong>
+						<small class="pl-2 text-muted">just now</small>
+			    		<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+			      			<span aria-hidden="true">&times;</span>
+			    		</button>
+			  		</div>
+			  		<div class="toast-body">
+			    		Your listing was posted!
+			  		</div>`);
+					$(`#toastNotification`).toast(`show`);
 					$(`#listingModal`).modal(`hide`);
 				},
 				error: (err)=> {
@@ -381,6 +391,17 @@ $(`#logoutBtn`).click(()=> {
 	$(`#registerModalBtn`).removeClass(`d-none`);
 	$(`#loginModalBtn`).removeClass(`d-none`);
 	$(`.loginActive`).remove();
+	$(`#toastNotification`).html(`<div class="toast-header">
+		<strong class="mr-auto">Logging out</strong>
+		<small class="pl-2 text-muted">just now</small>
+		<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="toast-body">
+		You are now logged out of your account
+	</div>`);
+	$(`#toastNotification`).toast(`show`);
 });
 
 const refreshView = ()=> {

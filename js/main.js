@@ -355,19 +355,32 @@ $(`#loginForm`).submit(()=> {
 				console.log(err);
 			},
 			success: (result)=> {
-				console.log(result);
-				sessionStorage.userId = result._id;
-				sessionStorage.username = result.username;
-				sessionStorage.name = result.name;
-				sessionStorage.email = result.email;
-				sessionStorage.address = result.address;
-				$(`#loginModal`).modal(`hide`);
-				$(`#registerModalBtn`).addClass(`d-none`);
-				$(`#loginModalBtn`).addClass(`d-none`);
-				$(`#logoutBtn`).removeClass(`d-none`);
-				$(`#addAListing`).removeClass(`d-none`);
-				if (onProductPage) {
-					refreshCommentsDiv($(`#productPage`)[0]);
+				let check = true;
+				if (result == `Invalid Username`) {
+					check = false;
+					$(`#loginUsername`).addClass(`is-invalid`);
+					$(`#loginUsername`).parent().children().last().show();
+				}
+
+				if (result == `Invalid Password`) {
+					check = false;
+					$(`#loginPassword`).addClass(`is-invalid`);
+					$(`#loginPassword`).parent().children().last().show();
+				}
+				if (check) {
+					sessionStorage.userId = result._id;
+					sessionStorage.username = result.username;
+					sessionStorage.name = result.name;
+					sessionStorage.email = result.email;
+					sessionStorage.address = result.address;
+					$(`#loginModal`).modal(`hide`);
+					$(`#registerModalBtn`).addClass(`d-none`);
+					$(`#loginModalBtn`).addClass(`d-none`);
+					$(`#logoutBtn`).removeClass(`d-none`);
+					$(`#addAListing`).removeClass(`d-none`);
+					if (onProductPage) {
+						refreshCommentsDiv($(`#productPage`)[0]);
+					}
 				}
 			}
 		});

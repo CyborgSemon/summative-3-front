@@ -571,6 +571,68 @@ const replyFunction = (e)=> {
 	});
 };
 
+$(`#editBtn`).click(() => {
+	event.preventDefault();
+	if (sessionStorage.length > 0 && sessionStorage.userId) {
+
+		let passFail = true;
+		const editListingTitle = $(`#editListingTitle`).val();
+		const editListingDescription = $(`#editListingDescription`).val();
+		const editListingPrice = $(`#editListingPrice`).val();
+		if (editListingTitle.length === 0) {
+			$(`#editListingTitle`).addClass(`is-invalid`);
+			$(`#editListingTitle`).parent().children().last().show();
+			passFail = false;
+		} else {
+			$(`#editListingTitle`).removeClass(`is-invalid`);
+			$(`#editListingTitle`).parent().children().last().hide();
+		}
+		if (listingDescription.length === 0) {
+			$(`#editListingDescription`).addClass(`is-invalid`);
+			$(`#editListingDescription`).parent().children().last().show();
+			passFail = false;
+		} else {
+			$(`#editListingDescription`).removeClass(`is-invalid`);
+			$(`#editListingDescription`).parent().children().last().hide();
+		}
+		if (listingPrice.length === 0) {
+			$(`#editListingPrice`).addClass(`is-invalid`);
+			$(`#editListingPrice`).parent().children().last().show();
+			passFail = false;
+		} else {
+			$(`#editListingPrice`).removeClass(`is-invalid`);
+			$(`#editListingPrice`).parent().children().last().hide();
+		}
+		if (passFail) {
+			$.ajax({
+				url: `${url}/newListing`,
+				method: `POST`,
+				data: {
+					title: listingTitle,
+					description: listingDescription,
+					price: listingPrice,
+					userId: sessionStorage.userId
+				},
+				success: (data)=> {
+					console.log(`successful`);
+					$(`#editListingTitle`).val(null);
+				    $(`#editListingDescription`).val(null);
+				    $(`#editListingPrice`).val(null);
+					$(`#toastListing`).toast(`show`);
+					$(`#editListingModal`).modal(`hide`);
+				},
+				error: (err)=> {
+					console.log(err);
+					console.log(`did not work`);
+				}
+			});
+		}
+	} else {
+		console.log(`You are not logged in`);
+	}
+});
+
+
 // $(`#listingList`).on(`click`, `.editBtn`, ()=> {
 // 	event.preventDefault();
 // 	if (!sessionStorage.userId) {

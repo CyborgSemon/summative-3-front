@@ -587,11 +587,9 @@ const replyFunction = (e)=> {
 	});
 };
 
-
-$(`#editBtn`).click(() => {
+$(`#editListingForm`).click(()=> {
 	event.preventDefault();
 	if (sessionStorage.length > 0 && sessionStorage.userId) {
-
 		let passFail = true;
 		const editListingTitle = $(`#editListingTitle`).val();
 		const editListingDescription = $(`#editListingDescription`).val();
@@ -604,7 +602,7 @@ $(`#editBtn`).click(() => {
 			$(`#editListingTitle`).removeClass(`is-invalid`);
 			$(`#editListingTitle`).parent().children().last().hide();
 		}
-		if (listingDescription.length === 0) {
+		if (editListingDescription.length === 0) {
 			$(`#editListingDescription`).addClass(`is-invalid`);
 			$(`#editListingDescription`).parent().children().last().show();
 			passFail = false;
@@ -612,7 +610,7 @@ $(`#editBtn`).click(() => {
 			$(`#editListingDescription`).removeClass(`is-invalid`);
 			$(`#editListingDescription`).parent().children().last().hide();
 		}
-		if (listingPrice.length === 0) {
+		if (editListingPrice.length === 0) {
 			$(`#editListingPrice`).addClass(`is-invalid`);
 			$(`#editListingPrice`).parent().children().last().show();
 			passFail = false;
@@ -621,22 +619,20 @@ $(`#editBtn`).click(() => {
 			$(`#editListingPrice`).parent().children().last().hide();
 		}
 		if (passFail) {
+			console.log($(`#productPage`).attr(`data-listingId`));
 			$.ajax({
-				url: `${url}/newListing`,
-				method: `POST`,
+				url: `${url}/updateListing`,
+				type: `PATCH`,
 				data: {
-					title: listingTitle,
-					description: listingDescription,
-					price: listingPrice,
+					id: $(`#productPage`).attr(`data-listingId`),
+					title: editListingTitle,
+					description: editListingDescription,
+					price: editListingPrice,
 					userId: sessionStorage.userId
 				},
 				success: (data)=> {
+					console.log(data);
 					console.log(`successful`);
-					$(`#editListingTitle`).val(null);
-				    $(`#editListingDescription`).val(null);
-				    $(`#editListingPrice`).val(null);
-					$(`#toastListing`).toast(`show`);
-					$(`#editListingModal`).modal(`hide`);
 				},
 				error: (err)=> {
 					console.log(err);
@@ -649,7 +645,12 @@ $(`#editBtn`).click(() => {
 	}
 });
 
-
+$(`#editBtn`).click(() => {
+	$(`#editListingTitle`).val($(`#itemTitle`).text());
+	$(`#editListingDescription`).val($(`#itemDescription`).text());
+	$(`#editListingPrice`).val(parseInt($('#itemPrice').text().replace(/[^a-zA-Z0-9 ]/g, "")));
+	$(`#editListingModal`).modal(`show`);
+});
 
 $(`#removeBtn`).click(()=> {
 	if (!sessionStorage.userId) {

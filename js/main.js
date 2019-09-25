@@ -679,6 +679,7 @@ $(`#removeBtn`).click(()=> {
 				getHome();
 			} else {
 				console.log(`Failed to delete`);
+				console.log(result);
 			}
 		},
 		error:(err)=> {

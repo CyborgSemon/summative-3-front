@@ -1,11 +1,8 @@
 let url;
-let mapsKey;
 let onProductPage = false;
 
-$(document).ready(function(){
-	console.log(sessionStorage);
+$(document).ready(()=> {
 	if(sessionStorage.username){
-		console.log(`you are logged in`);
 		$(`#registerModalBtn`).addClass(`d-none`);
 		$(`#loginModalBtn`).addClass(`d-none`);
     	$(`#logoutBtn`).removeClass(`d-none`);
@@ -23,7 +20,6 @@ $.ajax({
     },
     success: (result)=> {
         url = `${result.SERVER_URL}:${result.SERVER_PORT}`;
-        mapsKey = result.GOOGLE_MAPS_KEY;
         getHome();
     }
 });
@@ -104,7 +100,6 @@ $(`#registerForm`).click(()=> {
 				registerDate: Date.now()
 			},
 			success: (result)=> {
-				console.log(result);
 				sessionStorage.userId = result._id;
 				sessionStorage.username = result.username;
 				sessionStorage.name = result.name;
@@ -120,7 +115,7 @@ $(`#registerForm`).click(()=> {
 			},
 			error: (err)=> {
 				console.log(err);
-				console.log(`something went wrong`);
+				console.log(`Failed to regester user`);
 			}
 		});
 	}
@@ -132,7 +127,6 @@ const getListingsData = ()=> {
         type: `GET`,
         dataType: `json`,
         success: (data)=> {
-            console.log(data);
             $(`#listingPageList`).html(null);
             data.map((listing)=> {
 				let listingCard = ``;
@@ -295,7 +289,6 @@ $(`#listingForm`).click(() => {
 				contentType: false,
 				processData: false,
 				success: (data)=> {
-					console.log(`successful`);
 					$(`#listingTitle`).val(null);
 				    $(`#listingDescription`).val(null);
 				    $(`#listingPrice`).val(null);
@@ -315,7 +308,7 @@ $(`#listingForm`).click(() => {
 				},
 				error: (err)=> {
 					console.log(err);
-					console.log(`did not work`);
+					console.log(`Could not add listing`);
 				}
 			});
 		}
@@ -388,8 +381,6 @@ $(`#loginForm`).submit(()=> {
 				}
 			}
 		});
-	} else {
-		console.log(`You have not filled in all the login inputs`);
 	}
 });
 
@@ -434,7 +425,6 @@ const refreshCommentsDiv = (targetDiv)=> {
 			console.log(err);
 		},
 		success: (data)=> {
-			console.log(data);
 			$(`#productPage`).attr(`data-listingId`, data.info._id);
 			$(`#itemTitle`).text(data.info.title);
 			if (sessionStorage.userId == data.info.uploaderId) {
@@ -503,8 +493,6 @@ const refreshCommentsDiv = (targetDiv)=> {
 									console.log(err2);
 								}
 							});
-						} else {
-							console.log(`Invalid text`);
 						}
 					} else {
 						console.log(`You are not logged in`);
@@ -591,7 +579,6 @@ const replyFunction = (e)=> {
 					console.log(err);
 				},
 				success: (replyData)=> {
-					console.log(`Reply submitted`);
 					let formParent = $(`#replyForm`).parent();
 					$(`#replyForm`).remove();
 					formParent.append(`<div class="comment reply"><h5>${sessionStorage.username}</h5><p>${userComment}</p></div>`);
@@ -634,7 +621,6 @@ $(`#editListingForm`).click(()=> {
 			$(`#editListingPrice`).parent().children().last().hide();
 		}
 		if (passFail) {
-			console.log($(`#productPage`).attr(`data-listingId`));
 			$.ajax({
 				url: `${url}/updateListing`,
 				type: `PATCH`,
@@ -646,11 +632,9 @@ $(`#editListingForm`).click(()=> {
 					userId: sessionStorage.userId
 				},
 				success: (data)=> {
-					console.log(data);
-					console.log(`successful`);
 					$(`#itemTitle`).text(editListingTitle);
 					$(`#itemDescription`).text(editListingDescription);
-					$('#itemPrice').text(editListingPrice);
+					$(`#itemPrice`).text(editListingPrice);
 					$(`#editListingModal`).modal(`hide`);
 					$(`#editListingTitle`).val(null);
 					$(`#editListingDescription`).val(null);
@@ -670,7 +654,7 @@ $(`#editListingForm`).click(()=> {
 $(`#editBtn`).click(() => {
 	$(`#editListingTitle`).val($(`#itemTitle`).text());
 	$(`#editListingDescription`).val($(`#itemDescription`).text());
-	$(`#editListingPrice`).val(parseInt($('#itemPrice').text().replace(/[^a-zA-Z0-9 ]/g, "")));
+	$(`#editListingPrice`).val(parseInt($(`#itemPrice`).text().replace(/[^a-zA-Z0-9 ]/g, "")));
 	$(`#editListingModal`).modal(`show`);
 });
 

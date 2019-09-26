@@ -26,12 +26,16 @@ $.ajax({
 
 $(`#registerInstead`).click(()=> {
 	$(`#loginModal`).modal(`hide`);
-	$(`#registerModal`).modal(`show`);
+	setTimeout(()=> {
+		$(`#registerModal`).modal(`show`);
+	}, 500);
 });
 
 $(`#loginInstead`).click(()=> {
 	$(`#registerModal`).modal(`hide`);
-	$(`#loginModal`).modal(`show`);
+	setTimeout(()=> {
+		$(`#loginModal`).modal(`show`);
+	}, 500);
 });
 
 $(`#buyListing`).click(()=> {
@@ -447,6 +451,7 @@ $(`#loginForm`).submit(()=> {
 
 $(`#logoutBtn`).click(()=> {
 	sessionStorage.clear();
+	$(`#buyListing`).removeClass(`d-none`);
 	$(`#logoutBtn`).addClass(`d-none`);
 	$(`#addAListing`).addClass(`d-none`);
 	$(`#registerModalBtn`).removeClass(`d-none`);
@@ -489,7 +494,10 @@ const refreshCommentsDiv = (targetDiv)=> {
 			$(`#productPage`).attr(`data-listingId`, data.info._id);
 			$(`#itemTitle`).text(data.info.title);
 			if (sessionStorage.userId == data.info.uploaderId) {
+				$(`#buyListing`).addClass(`d-none`);
 				$(`#productBtns`).removeClass(`d-none`);
+			} else {
+				$(`#buyListing`).removeClass(`d-none`);
 			}
 			$(`#itemImage`).attr(`style`, `background-image: url('${url}/${data.info.filePath.replace(/\\/g, "/")}')`);
 			$(`#itemPrice`).text(`$${data.info.price}`);

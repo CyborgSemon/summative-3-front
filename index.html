@@ -7,43 +7,27 @@
 		<link href="css/main.min.css" rel="stylesheet">
 	</head>
 	<body>
-		<div class="navbar bg-dark text-white d-flex justify-content-end">
-			<ul class="nav">
-				<li class="nav-item">
-					<button id="homeBtn" type="button" name="button" class="btn btn-outline-light ml-1">Home</button>
-				</li>
-				<li class="nav-item">
-					<button id="listingsPageBtn" type="button" name="button" class="btn btn-outline-light ml-1">Listings</button>
-				</li>
-				<li class="nav-item">
-					<button type="button" name="login" data-toggle="modal" data-target="#loginModal" class="btn btn-outline-light ml-1" id="loginModalBtn">LOGIN</button>
-				</li>
-				<li class="nav-item">
-					<button type="button" name="register" data-toggle="modal" data-target="#registerModal" class="btn btn-outline-light ml-1" id="registerModalBtn">REGISTER</button>
-				</li>
-				<li class="nav-item">
-					<button type="button" name="addAListing" data-toggle="modal" data-target="#listingModal" class="btn btn-outline-light ml-1 d-none" id="addAListing">ADD A LISTING</button>
-				</li>
-				<li class="nav-item">
-					<button type="button" name="logout" class="btn btn-outline-light ml-1 d-none" id="logoutBtn">LOGOUT</button>
-				</li>
-			</ul>
+		<div class="navbar bg-dark text-white d-flex justify-content-between">
+			<div>
+				<button id="homeBtn" type="button" name="button" class="btn btn-outline-light ml-1">Home</button>
+				<button id="listingsPageBtn" type="button" name="button" class="btn btn-outline-light ml-1">Listings</button>
+			</div>
+			<div>
+				<button type="button" name="login" data-toggle="modal" data-target="#loginModal" class="btn btn-outline-light ml-1" id="loginModalBtn">Login</button>
+				<button type="button" name="register" data-toggle="modal" data-target="#registerModal" class="btn btn-outline-light ml-1" id="registerModalBtn">Register</button>
+				<button type="button" name="addAListing" data-toggle="modal" data-target="#listingModal" class="btn btn-outline-light ml-1 d-none" id="addAListing">Add Listing</button>
+				<button type="button" name="logout" class="btn btn-outline-light ml-1 d-none" id="logoutBtn">Logout</button>
+			</div>
 		</div>
 		<div id="homeContainer" class="container-fluid position-relative">
-			<div class="toast" role="alert" aria-live="polite" aria-atomic="true" id="toastListing" style="position: absolute; top: 1rem; right: 1rem;" data-delay="5000">
-				<div class="toast-header">
-					<strong class="mr-auto">Congratulations!</strong>
-					<small class="text-muted">just now</small>
-					<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="toast-body">
-					Your listing was posted!
-				</div>
+			<div class="toast" role="alert" aria-live="polite" aria-atomic="true" id="toastNotification" style="position: absolute; top: 1rem; right: 1rem;" data-delay="5000">
+
 			</div>
 			<div class="row" id="featuredListing">
 
+			</div>
+			<div class="container">
+				<h3 class="text-center">What You Might Like...</h3>
 			</div>
 			<div id="listingList" class="row">
 
@@ -57,8 +41,8 @@
 		<div id="productPage" class="container d-none" data-listingId>
 			<div class="d-flex justify-content-between">
 				<h2 id="itemTitle">This is a product</h2>
-				<div id="productBtns" class="d-none">
-					<button class="btn btn-info editBtn">Edit</button>
+				<div id="productBtns" class="d-none loginActive">
+					<button id="editBtn" class="btn btn-info editBtn">Edit</button>
 					<button id="removeBtn" class="btn btn-danger removeBtn">Remove</button>
 				</div>
 			</div>
@@ -68,7 +52,7 @@
 					<h4>Posted by <span id="posterName">NAME</span></h4>
 					<div>
 						<h4 id="itemPrice">$500.00</h4>
-						<button type="button" class="btn btn-primary">Buy!</button>
+						<button id="buyListing" type="button" class="btn btn-primary">Buy!</button>
 					</div>
 				</div>
 			</div>
@@ -176,7 +160,12 @@
 								<input type="date" class="form-control validationField" id="registerDOB" required>
 								<div class="invalid-feedback">DOB is not valid</div>
 							</div>
-							<button type="submit" class="btn btn-primary mt-2" id="registerForm">Register</button>
+							<div class="d-flex justify-content-between">
+								<button type="submit" class="btn btn-primary" id="registerForm">Register</button>
+								<div class="d-flex align-items-center">
+									<span>Already have an account?</span><button id="loginInstead" type="button" class="btn btn-link">Login</button>
+								</div>
+							</div>
 						</form>
 					</div>
 				</div>
@@ -204,7 +193,12 @@
 								<input type="password" class="form-control" id="loginPassword" required>
 								<div class="invalid-feedback">Password is not valid</div>
 							</div>
-							<button type="submit" class="btn btn-primary">Login</button>
+							<div class="d-flex justify-content-between">
+								<button type="submit" class="btn btn-primary">Login</button>
+								<div class="d-flex align-items-center">
+									<span>Dont have an account?</span> <button id="registerInstead" type="button" class="btn btn-link">Register</button>
+								</div>
+							</div>
 						</form>
 					</div>
 				</div>
@@ -238,12 +232,57 @@
 								<div class="invalid-feedback">Price is not valid</div>
 							</div>
 							<div class="custom-file">
-								<label class="custom-file-label" for="listingImageFile">Upload an Image</label>
+								<label class="custom-file-label" id="fileUploadLabel" for="listingImageFile">Upload an Image</label>
 								<input type="file" class="custom-file-input" id="listingImageFile" required>
 								<div class="invalid-feedback">File is not valid</div>
 							</div>
 							<button type="submit" class="btn btn-primary mt-2" id="listingForm">Submit</button>
 						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="editListingModal" tabindex="-1" role="dialog" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Edit Listing</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<form enctype="multipart/form-data">
+							<div class="form-group">
+								<label for="editListingTitle">Title</label>
+								<input type="text" class="form-control" id="editListingTitle" required>
+								<div class="invalid-feedback">Title is not valid</div>
+							</div>
+							<div class="form-group">
+								<label for="editListingDescription">Description</label>
+								<input type="text" class="form-control" id="editListingDescription" required>
+								<div class="invalid-feedback">Description is not valid</div>
+							</div>
+							<div class="form-group">
+								<label for="editListingPrice">Price</label>
+								<input type="number" class="form-control" id="editListingPrice" required>
+								<div class="invalid-feedback">Price is not valid</div>
+							</div>
+							<button type="submit" class="btn btn-primary mt-2" id="editListingForm">Submit</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="buyModal" tabindex="-1" role="dialog" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Congratulations</h5>
+					</div>
+					<div class="modal-body">
+						<h4>Congratulations on your purchase!</h4>
+						<button type="button" class="btn btn-primary" id="buyProduct">Ok</button>
 					</div>
 				</div>
 			</div>

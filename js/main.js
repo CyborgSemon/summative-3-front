@@ -1,12 +1,8 @@
 let url;
-let mapsKey;
-let editing = false;
 let onProductPage = false;
 
-$(document).ready(function(){
-	console.log(sessionStorage);
-	if(sessionStorage.username){
-		console.log(`you are logged in`);
+$(document).ready(()=> {
+	if (sessionStorage.length > 0 && sessionStorage.userId) {
 		$(`#registerModalBtn`).addClass(`d-none`);
 		$(`#loginModalBtn`).addClass(`d-none`);
     	$(`#logoutBtn`).removeClass(`d-none`);
@@ -24,9 +20,62 @@ $.ajax({
     },
     success: (result)=> {
         url = `${result.SERVER_URL}:${result.SERVER_PORT}`;
-        mapsKey = result.GOOGLE_MAPS_KEY;
         getHome();
     }
+});
+
+$(`#registerInstead`).click(()=> {
+	$(`#loginModal`).modal(`hide`);
+	setTimeout(()=> {
+		$(`#registerModal`).modal(`show`);
+	}, 500);
+});
+
+$(`#loginInstead`).click(()=> {
+	$(`#registerModal`).modal(`hide`);
+	setTimeout(()=> {
+		$(`#loginModal`).modal(`show`);
+	}, 500);
+});
+
+$(`#buyListing`).click(()=> {
+	if (sessionStorage.length > 0 && sessionStorage.userId) {
+		$(`#buyModal`).modal({
+			backdrop: `static`,
+			keyboard: false
+		});
+		$(`#buyModal`).modal(`show`);
+	} else {
+		$(`#loginModal`).modal(`show`);
+	}
+});
+
+$(`#buyProduct`).click(()=> {
+	if (sessionStorage.length > 0 && sessionStorage.userId) {
+		$.ajax({
+			url: `${url}/buyListing`,
+			type: `PATCH`,
+			data: {
+				id: $(`#productPage`).attr(`data-listingId`),
+				userId: sessionStorage.userId
+			},
+			error: (err)=> {
+				console.log(err);
+			},
+			success: (result)=> {
+				if (result != `invalid`) {
+					onProductPage = false;
+					$(`#buyModal`).modal(`hide`);
+				    $(`#homeContainer`).show();
+				    $(`#listingsPage`).addClass(`d-none`);
+					$(`#productPage`).addClass(`d-none`);
+					getHome();
+				} else {
+					console.log(`You can not buy your own listing`);
+				}
+			}
+		});
+	}
 });
 
 $(`#registerForm`).click(()=> {
@@ -105,7 +154,6 @@ $(`#registerForm`).click(()=> {
 				registerDate: Date.now()
 			},
 			success: (result)=> {
-				console.log(result);
 				sessionStorage.userId = result._id;
 				sessionStorage.username = result.username;
 				sessionStorage.name = result.name;
@@ -118,10 +166,16 @@ $(`#registerForm`).click(()=> {
 			    $(`#registerConfirmPassword`).val(null);
 			    $(`#registerEmail`).val(null);
 			    $(`#registerDOB`).val(null);
+				$(`#registerModal`).modal(`hide`);
+				if (onProductPage) {
+					refreshCommentsDiv();
+				} else {
+					refreshView();
+				}
 			},
 			error: (err)=> {
 				console.log(err);
-				console.log(`something went wrong`);
+				console.log(`Failed to regester user`);
 			}
 		});
 	}
@@ -133,8 +187,7 @@ const getListingsData = ()=> {
         type: `GET`,
         dataType: `json`,
         success: (data)=> {
-            console.log(data);
-            $(`#listingList`).empty();
+            $(`#listingPageList`).html(null);
             data.map((listing)=> {
 				let listingCard = ``;
 				 listingCard += `<div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3 mt-3 text-center">`;
@@ -151,15 +204,6 @@ const getListingsData = ()=> {
 				listingCard += `</div>`;
                 $(`#listingList`).append(listingCard);
                 $(`#listingPageList`).append(listingCard);
-				// `<li class="list-group-item d-flex justify-content-between align-items-center listingItem" data-listingId="${listing._id}">
-                // <span class="listingName">${listing.title}</span>`;
-                // // if (sessionStorage.uploaderId) {
-                //     listingCard += `<div>
-                //     <button class="btn btn-info editBtn">Edit</button>
-                //     <button class="btn btn-danger removeBtn">Remove</button>
-                //     </div>`;
-                // // }
-                // listingCard +=`</li>`;
             });
 			refreshView();
         }
@@ -174,14 +218,14 @@ const getHome = ()=> {
 		success: (data)=> {
 			$(`#featuredListing`).html(`<div class="container">
 											<div class="row">
-												<h3 class="text-center">Featured Listing</h3>
+												<h3 class="text-center featuredTitle">Featured Listing</h3>
 											</div>
 											<div class="card mb-3 border-dark" style="width: 100%;">
 												<div class="row no-gutters">
 													<div class="col-md-4" style="background-image: url('${url}/${data[0].filePath.replace(/\\/g, "/")}'); background-size: cover; background-position: center; background-repeat: no-repeat; height: 300px;">
 												</div>
 												<div class="col-md-8">
-													<div class="card-body" style="max-height: 100%; width: 600px; margin: 0 auto;">
+													<div class="card-body" style="max-height: 100%; margin: 0 auto;">
 														<h5 class="card-title">${data[0].title}</h5>
 														<p class="card-text">${data[0].description}</p>
 														<div class="row">
@@ -243,6 +287,14 @@ $(`#homeBtn`).click(() => {
 	getHome();
 });
 
+$(`#addAListing`).click(()=> {
+	$(`#listingModal`).modal(`show`);
+});
+
+$(`#listingImageFile`).change(()=> {
+	$(`#fileUploadLabel`).text($(`#listingImageFile`)[0].files[0].name);
+});
+
 $(`#listingForm`).click(() => {
 	event.preventDefault();
 	if (sessionStorage.length > 0 && sessionStorage.userId) {
@@ -301,17 +353,27 @@ $(`#listingForm`).click(() => {
 				contentType: false,
 				processData: false,
 				success: (data)=> {
-					console.log(`successful`);
 					$(`#listingTitle`).val(null);
 				    $(`#listingDescription`).val(null);
 				    $(`#listingPrice`).val(null);
 					$(`#listingImageFile`).val(null);
-					$(`#toastListing`).toast(`show`);
+					$(`#fileUploadLabel`).text(`Upload an Image`);
+					$(`#toastNotification`).html(`<div class="toast-header">
+			    		<strong class="mr-auto">Congratulations!</strong>
+						<small class="pl-2 text-muted">just now</small>
+			    		<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+			      			<span aria-hidden="true">&times;</span>
+			    		</button>
+			  		</div>
+			  		<div class="toast-body">
+			    		Your listing was posted!
+			  		</div>`);
+					$(`#toastNotification`).toast(`show`);
 					$(`#listingModal`).modal(`hide`);
 				},
 				error: (err)=> {
 					console.log(err);
-					console.log(`did not work`);
+					console.log(`Could not add listing`);
 				}
 			});
 		}
@@ -384,18 +446,28 @@ $(`#loginForm`).submit(()=> {
 				}
 			}
 		});
-	} else {
-		console.log(`You have not filled in all the login inputs`);
 	}
 });
 
 $(`#logoutBtn`).click(()=> {
 	sessionStorage.clear();
+	$(`#buyListing`).removeClass(`d-none`);
 	$(`#logoutBtn`).addClass(`d-none`);
 	$(`#addAListing`).addClass(`d-none`);
 	$(`#registerModalBtn`).removeClass(`d-none`);
 	$(`#loginModalBtn`).removeClass(`d-none`);
 	$(`.loginActive`).remove();
+	$(`#toastNotification`).html(`<div class="toast-header">
+		<strong class="mr-auto">Logging out</strong>
+		<small class="pl-2 text-muted">just now</small>
+		<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="toast-body">
+		You are now logged out of your account
+	</div>`);
+	$(`#toastNotification`).toast(`show`);
 });
 
 const refreshView = ()=> {
@@ -419,11 +491,13 @@ const refreshCommentsDiv = (targetDiv)=> {
 			console.log(err);
 		},
 		success: (data)=> {
-			console.log(data);
 			$(`#productPage`).attr(`data-listingId`, data.info._id);
 			$(`#itemTitle`).text(data.info.title);
 			if (sessionStorage.userId == data.info.uploaderId) {
+				$(`#buyListing`).addClass(`d-none`);
 				$(`#productBtns`).removeClass(`d-none`);
+			} else {
+				$(`#buyListing`).removeClass(`d-none`);
 			}
 			$(`#itemImage`).attr(`style`, `background-image: url('${url}/${data.info.filePath.replace(/\\/g, "/")}')`);
 			$(`#itemPrice`).text(`$${data.info.price}`);
@@ -488,8 +562,6 @@ const refreshCommentsDiv = (targetDiv)=> {
 									console.log(err2);
 								}
 							});
-						} else {
-							console.log(`Invalid text`);
 						}
 					} else {
 						console.log(`You are not logged in`);
@@ -576,7 +648,6 @@ const replyFunction = (e)=> {
 					console.log(err);
 				},
 				success: (replyData)=> {
-					console.log(`Reply submitted`);
 					let formParent = $(`#replyForm`).parent();
 					$(`#replyForm`).remove();
 					formParent.append(`<div class="comment reply"><h5>${sessionStorage.username}</h5><p>${userComment}</p></div>`);
@@ -586,6 +657,75 @@ const replyFunction = (e)=> {
 		}
 	});
 };
+
+$(`#editListingForm`).click(()=> {
+	event.preventDefault();
+	if (sessionStorage.length > 0 && sessionStorage.userId) {
+		let passFail = true;
+		const editListingTitle = $(`#editListingTitle`).val();
+		const editListingDescription = $(`#editListingDescription`).val();
+		const editListingPrice = $(`#editListingPrice`).val();
+		if (editListingTitle.length === 0) {
+			$(`#editListingTitle`).addClass(`is-invalid`);
+			$(`#editListingTitle`).parent().children().last().show();
+			passFail = false;
+		} else {
+			$(`#editListingTitle`).removeClass(`is-invalid`);
+			$(`#editListingTitle`).parent().children().last().hide();
+		}
+		if (editListingDescription.length === 0) {
+			$(`#editListingDescription`).addClass(`is-invalid`);
+			$(`#editListingDescription`).parent().children().last().show();
+			passFail = false;
+		} else {
+			$(`#editListingDescription`).removeClass(`is-invalid`);
+			$(`#editListingDescription`).parent().children().last().hide();
+		}
+		if (editListingPrice.length === 0) {
+			$(`#editListingPrice`).addClass(`is-invalid`);
+			$(`#editListingPrice`).parent().children().last().show();
+			passFail = false;
+		} else {
+			$(`#editListingPrice`).removeClass(`is-invalid`);
+			$(`#editListingPrice`).parent().children().last().hide();
+		}
+		if (passFail) {
+			$.ajax({
+				url: `${url}/updateListing`,
+				type: `PATCH`,
+				data: {
+					id: $(`#productPage`).attr(`data-listingId`),
+					title: editListingTitle,
+					description: editListingDescription,
+					price: editListingPrice,
+					userId: sessionStorage.userId
+				},
+				success: (data)=> {
+					$(`#itemTitle`).text(editListingTitle);
+					$(`#itemDescription`).text(editListingDescription);
+					$(`#itemPrice`).text(editListingPrice);
+					$(`#editListingModal`).modal(`hide`);
+					$(`#editListingTitle`).val(null);
+					$(`#editListingDescription`).val(null);
+					$(`#editListingPrice`).val(null);
+				},
+				error: (err)=> {
+					console.log(err);
+					console.log(`did not work`);
+				}
+			});
+		}
+	} else {
+		console.log(`You are not logged in`);
+	}
+});
+
+$(`#editBtn`).click(() => {
+	$(`#editListingTitle`).val($(`#itemTitle`).text());
+	$(`#editListingDescription`).val($(`#itemDescription`).text());
+	$(`#editListingPrice`).val(parseInt($(`#itemPrice`).text().replace(/[^a-zA-Z0-9 ]/g, "")));
+	$(`#editListingModal`).modal(`show`);
+});
 
 $(`#removeBtn`).click(()=> {
 	if (!sessionStorage.userId) {
@@ -608,6 +748,7 @@ $(`#removeBtn`).click(()=> {
 				getHome();
 			} else {
 				console.log(`Failed to delete`);
+				console.log(result);
 			}
 		},
 		error:(err)=> {
@@ -616,260 +757,3 @@ $(`#removeBtn`).click(()=> {
 		}
 	});
 });
-
-// $(`#listingList`).on(`click`, `.editBtn`, ()=> {
-// 	event.preventDefault();
-// 	if (!sessionStorage.userId) {
-// 		alert(`401, permission denied`);
-// 		return;
-// 	}
-// 	$.ajax({
-// 		url: `${url}/listing/${id}`,
-// 		type: `post`,
-// 		data: {
-// 			userId: sessionStorage.userId
-// 		},
-// 		dataType: `json`,
-// 		success:(product)=> {
-// 			console.log(product);
-// 			$(`#listingTitle`).val(product.title);
-// 			$(`#listingDescription`).val(product.description);
-// 			$(`#listingPrice`).val(product.price);
-// 			$(`#addProductButton`).text(`Edit Listing`).addClass(`btn-warning`);
-// 			$(`#heading`).text(`Edit Product`);
-// 			editing = true;
-// 		},
-// 		error:(err)=> {
-// 			console.log(err);
-// 			console.log(`something went wrong with getting the single product`);
-// 		}
-// 	});
-// });
-
-// $(`#productList`).on(`click`, `.removeBtn`, ()=> {
-// 	event.preventDefault();
-// 	if (!sessionStorage.userId) {
-// 		alert(`401, permission denied`);
-// 		return;
-// 	}
-// 	// const id = $(this).parent().parent().data(`id`);
-// 	// const li = $(this).parent().parent();
-// 	$.ajax({
-// 		url: `${url}/listing/${id}`,
-// 		type: `DELETE`,
-// 		success:(result)=> {
-// 			li.remove();
-// 		},
-// 		error:(err)=> {
-// 			console.log(err);
-// 			console.log(`something went wrong deleting the product`);
-// 		}
-// 	});
-// });
-
-
-/*
-
-
-
-Below code is merged code form braydens branch. It still needs to be chekced
-
-
-
-*/
-
-
-
-
-//         if (editing === true) {
-//             const id = $('#productID').val();
-//             $.ajax({
-//                 url: `${url}/product/${id}`,
-//                 type: 'PATCH',
-//                 data: {
-//                     name: productName,
-//                     price: productPrice,
-//                     userId: sessionStorage.userId
-//                 },
-//                 success:function(result){
-//                     console.log(result);
-//                     $(`#listingTitle`).val(null);
-//                     $(`#listingDescription`).val(null);
-//                     $('#listingPrice').val(null);
-//                     $(`#addProductButton`).text(`Add Listing`).addClass(`btn-warning`);
-//                     $(`#heading`).text(`Add Product`);
-//                     editing = false;
-//                     const allProducts = $(`.productItem`);
-//                     allProducts.each(function(){
-//                         if($(this).data(`id`) === id){
-//                             $(this).find(`.productName`).text(productName);
-//                         }
-//                     });
-//                 },
-//                 error: function(err){
-//                     console.log(err);
-//                     console.log(`something went wront with editing the product`);
-//                 }
-//             });
-//         } else {
-//             $.ajax({
-//                 url: `${url}/newListing`,
-//                 method: `POST`,
-//                 data: fd,
-//                 contentType: false,
-//                 processData: false,
-//                 success: (data)=> {
-//                     console.log(`successful`);
-//                 },
-//                 error: (err)=> {
-//                     console.log(err);
-//                     console.log(`did not work`);
-//                 }
-//             });
-//         }
-//     }
-// });
-//
-//
-// $(`#loginForm`).submit(()=> {
-//     event.preventDefault();
-//     let loginUsername = $(`#loginUsername`).val();
-//     let loginPassword = $(`#loginPassword`).val();
-//     if (loginUsername.length !== 0 && loginPassword.length !== 0) {
-//         $.ajax({
-//             url: `${url}/login`,
-//             type: `POST`,
-//             data: {
-//                 username: loginUsername,
-//                 password: loginPassword
-//             },
-//             error: (err)=> {
-//                 console.log(`Error logging in`);
-//                 console.log(err);
-//             },
-//             success: (result)=> {
-//                 console.log(result);
-//                 sessionStorage.userId = result._id;
-//                 sessionStorage.username = result.username;
-//                 sessionStorage.name = result.name;
-//                 sessionStorage.email = result.email;
-//                 sessionStorage.address = result.address;
-//             }
-//         });
-//     } else {
-//         console.log(`You have not filled in all the login inputs`);
-//     }
-// });
-//
-// $(`#logoutBtn`).click(()=> {
-//     sessionStorage.clear();
-// });
-//
-// $(`#addComment`).click(()=> {
-//     event.preventDefault();
-//     let userComment = $(`#userComment`).val();
-//     if(userComment.length === 0){
-//         console.log(`please enter a comment`);
-//     }else{
-//         if(sessionStorage.length !== 0){
-//             $.ajax({
-//                 url: `${url}/addAComment`,
-//                 type: `POST`,
-//                 data: {
-//                     commentUsername: sessionStorage.username,
-//                     commentText: userComment,
-//                     commentDate: Date.now()
-//                 },
-//                 success: (data)=> {
-//                     console.log(`comment posted`);
-//                 },
-//                 error: (err)=> {
-//                     console.log(err);
-//                     console.log(`did not post comment`);
-//                 }
-//             });
-//         }else {
-//             console.log(`cannot post comment`);
-//         }
-//     }
-// });
-//
-// $(`#listingList`).on(`click`, `.editBtn`, ()=> {
-//     event.preventDefault();
-//     if (!sessionStorage.userId) {
-//         alert(`401, permission denied`);
-//         return;
-//     }
-//     // const id = (idk what the target was)
-//     $.ajax({
-//         url: `${url}/listing/${id}`,
-//         type: `post`,
-//         data: {
-//             userId: sessionStorage.userId
-//         },
-//         dataType: `json`,
-//         success:(product)=> {
-//             console.log(product);
-//             $(`#listingTitle`).val(product.title);
-//             $(`#listingDescription`).val(product.description);
-//             $('#listingPrice').val(product.price);
-//             $(`#addProductButton`).text(`Edit Listing`).addClass(`btn-warning`);
-//             $(`#heading`).text(`Edit Product`);
-//             editing = true;
-//
-//         },
-//         error:(err)=> {
-//             console.log(err);
-//             console.log(`something went wrong with getting the single product`);
-//         }
-//     });
-// });
-//
-// $(`#productList`).on(`click`, `.removeBtn`, ()=> {
-//     event.preventDefault();
-//     if (!sessionStorage.userId) {
-//         alert(`401, permission denied`);
-//         return;
-//     }
-//     // const id = $(this).parent().parent().data(`id`);
-//     // const li = $(this).parent().parent();
-//     $.ajax({
-//         url: `${url}/listing/${id}`,
-//         type: `DELETE`,
-//         success:(result)=> {
-//             li.remove();
-//         },
-//         error:function(err) {
-//             console.log(err);
-//             console.log(`something went wrong deleting the product`);
-//         }
-//     });
-// });
-//
-// $(`#commentList`).on(`click`, `.editBtn`, ()=> {
-//     event.preventDefault();
-//     if (!sessionStorage.userId) {
-//         alert(`401, permission denied`);
-//         return;
-//     }
-//     // const id = (idk what the target was)
-//     $.ajax({
-//         url: `${url}/getComment`,
-//         type: `post`,
-//         data: {
-//             userId: sessionStorage.userId
-//         },
-//         dataType: `json`,
-//         success:(comment)=> {
-//             console.log(comment);
-//             $(`#commentText`).val(comment.text);
-//             $(`#addProductButton`).text(`Edit Listing`).addClass(`btn-warning`);
-//             $(`#heading`).text(`Edit Product`);
-//             editing = true;
-//         },
-//         error:(err)=> {
-//             console.log(err);
-//             console.log(`something went wrong with getting the single product`);
-//         }
-//     });
-// });

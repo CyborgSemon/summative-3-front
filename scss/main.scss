@@ -47,10 +47,19 @@
 	background-size: contain;
 	width: 50%;
 	height: 300px;
+	@media screen and (max-width: 700px) {
+		width: 100%;
+	}
 }
 
 #featuredListing {
 	justify-content: center;
+}
+
+.featuredTitle {
+	@media screen and (max-width: 700px){
+		padding-left: 12px;
+	}
 }
 
 .itemTop {
@@ -86,6 +95,10 @@
 	}
 }
 
+#registerForm {
+	padding: 0.375rem !important;
+}
+
 #replyForm {
 	margin-top: 12px;
 	button {
@@ -112,4 +125,8 @@
 	&:hover .btn-sm {
 		display: block;
 	}
+}
+
+#toastNotification {
+	z-index: 2;
 }

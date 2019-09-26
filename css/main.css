@@ -39,9 +39,16 @@
   background-size: contain;
   width: 50%;
   height: 300px; }
+  @media screen and (max-width: 700px) {
+    #itemImage {
+      width: 100%; } }
 
 #featuredListing {
   justify-content: center; }
+
+@media screen and (max-width: 700px) {
+  .featuredTitle {
+    padding-left: 12px; } }
 
 @media screen and (max-width: 700px) {
   .itemTop {
@@ -67,6 +74,9 @@
   #commentForm button {
     margin-left: 8px; }
 
+#registerForm {
+  padding: 0.375rem !important; }
+
 #replyForm {
   margin-top: 12px; }
   #replyForm button {
@@ -86,5 +96,8 @@
     display: none; }
   .comment:hover .btn-sm {
     display: block; }
+
+#toastNotification {
+  z-index: 2; }
 
 /*# sourceMappingURL=main.css.map */

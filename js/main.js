@@ -2,7 +2,7 @@ let url;
 let onProductPage = false;
 
 $(document).ready(()=> {
-	if(sessionStorage.username){
+	if (sessionStorage.length > 0 && sessionStorage.userId) {
 		$(`#registerModalBtn`).addClass(`d-none`);
 		$(`#loginModalBtn`).addClass(`d-none`);
     	$(`#logoutBtn`).removeClass(`d-none`);
@@ -22,6 +22,56 @@ $.ajax({
         url = `${result.SERVER_URL}:${result.SERVER_PORT}`;
         getHome();
     }
+});
+
+$(`#registerInstead`).click(()=> {
+	$(`#loginModal`).modal(`hide`);
+	$(`#registerModal`).modal(`show`);
+});
+
+$(`#loginInstead`).click(()=> {
+	$(`#registerModal`).modal(`hide`);
+	$(`#loginModal`).modal(`show`);
+});
+
+$(`#buyListing`).click(()=> {
+	if (sessionStorage.length > 0 && sessionStorage.userId) {
+		$(`#buyModal`).modal({
+			backdrop: `static`,
+			keyboard: false
+		});
+		$(`#buyModal`).modal(`show`);
+	} else {
+		$(`#loginModal`).modal(`show`);
+	}
+});
+
+$(`#buyProduct`).click(()=> {
+	if (sessionStorage.length > 0 && sessionStorage.userId) {
+		$.ajax({
+			url: `${url}/buyListing`,
+			type: `PATCH`,
+			data: {
+				id: $(`#productPage`).attr(`data-listingId`),
+				userId: sessionStorage.userId
+			},
+			error: (err)=> {
+				console.log(err);
+			},
+			success: (result)=> {
+				if (result != `invalid`) {
+					onProductPage = false;
+					$(`#buyModal`).modal(`hide`);
+				    $(`#homeContainer`).show();
+				    $(`#listingsPage`).addClass(`d-none`);
+					$(`#productPage`).addClass(`d-none`);
+					getHome();
+				} else {
+					console.log(`You can not buy your own listing`);
+				}
+			}
+		});
+	}
 });
 
 $(`#registerForm`).click(()=> {
@@ -112,6 +162,12 @@ $(`#registerForm`).click(()=> {
 			    $(`#registerConfirmPassword`).val(null);
 			    $(`#registerEmail`).val(null);
 			    $(`#registerDOB`).val(null);
+				$(`#registerModal`).modal(`hide`);
+				if (onProductPage) {
+					refreshCommentsDiv();
+				} else {
+					refreshView();
+				}
 			},
 			error: (err)=> {
 				console.log(err);
@@ -231,6 +287,10 @@ $(`#addAListing`).click(()=> {
 	$(`#listingModal`).modal(`show`);
 });
 
+$(`#listingImageFile`).change(()=> {
+	$(`#fileUploadLabel`).text($(`#listingImageFile`)[0].files[0].name);
+});
+
 $(`#listingForm`).click(() => {
 	event.preventDefault();
 	if (sessionStorage.length > 0 && sessionStorage.userId) {
@@ -293,6 +353,7 @@ $(`#listingForm`).click(() => {
 				    $(`#listingDescription`).val(null);
 				    $(`#listingPrice`).val(null);
 					$(`#listingImageFile`).val(null);
+					$(`#fileUploadLabel`).text(`Upload an Image`);
 					$(`#toastNotification`).html(`<div class="toast-header">
 			    		<strong class="mr-auto">Congratulations!</strong>
 						<small class="pl-2 text-muted">just now</small>

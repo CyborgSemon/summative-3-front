@@ -167,6 +167,10 @@ $(`#registerForm`).click(()=> {
 			    $(`#registerEmail`).val(null);
 			    $(`#registerDOB`).val(null);
 				$(`#registerModal`).modal(`hide`);
+				$(`#loginModalBtn`).addClass(`d-none`);
+				$(`#registerModalBtn`).addClass(`d-none`);
+				$(`#addAListing`).removeClass(`d-none`);
+				$(`#logoutBtn`).removeClass(`d-none`);
 				if (onProductPage) {
 					refreshCommentsDiv();
 				} else {
@@ -457,6 +461,7 @@ $(`#logoutBtn`).click(()=> {
 	$(`#registerModalBtn`).removeClass(`d-none`);
 	$(`#loginModalBtn`).removeClass(`d-none`);
 	$(`.loginActive`).remove();
+	$(`.loginActiveHide`).addClass(`d-none`);
 	$(`#toastNotification`).html(`<div class="toast-header">
 		<strong class="mr-auto">Logging out</strong>
 		<small class="pl-2 text-muted">just now</small>
@@ -467,7 +472,9 @@ $(`#logoutBtn`).click(()=> {
 	<div class="toast-body">
 		You are now logged out of your account
 	</div>`);
-	$(`#toastNotification`).toast(`show`);
+	setTimeout(()=> {
+		$(`#toastNotification`).toast(`show`);
+	}, 250);
 });
 
 const refreshView = ()=> {
@@ -498,6 +505,7 @@ const refreshCommentsDiv = (targetDiv)=> {
 				$(`#productBtns`).removeClass(`d-none`);
 			} else {
 				$(`#buyListing`).removeClass(`d-none`);
+				$(`#productBtns`).addClass(`d-none`);
 			}
 			$(`#itemImage`).attr(`style`, `background-image: url('${url}/${data.info.filePath.replace(/\\/g, "/")}')`);
 			$(`#itemPrice`).text(`$${data.info.price}`);
@@ -572,6 +580,7 @@ const refreshCommentsDiv = (targetDiv)=> {
 			$(`#itemCommentsParent`).append(`<div id="itemComments"></div>`);
 
 			if (data.comments == `No comments found`) {
+				$(`#itemComments`).html(null);
 				$(`#itemComments`).append(`<h4 id="noCommentsMsg">No comments found.</h4>`);
 			} else {
 				let commentString = ``;
@@ -703,7 +712,7 @@ $(`#editListingForm`).click(()=> {
 				success: (data)=> {
 					$(`#itemTitle`).text(editListingTitle);
 					$(`#itemDescription`).text(editListingDescription);
-					$(`#itemPrice`).text(editListingPrice);
+					$(`#itemPrice`).text(`$${editListingPrice}`);
 					$(`#editListingModal`).modal(`hide`);
 					$(`#editListingTitle`).val(null);
 					$(`#editListingDescription`).val(null);

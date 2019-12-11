@@ -1,4 +1,4 @@
-let url;
+let url = 'https://yoobee-geek-store-back.herokuapp.com';
 let onProductPage = false;
 
 $(document).ready(()=> {
@@ -8,20 +8,6 @@ $(document).ready(()=> {
     	$(`#logoutBtn`).removeClass(`d-none`);
 		$(`#addAListing`).removeClass(`d-none`);
 	}
-});
-
-$.ajax({
-    url: `config.json`,
-    type: `GET`,
-    dataType: `json`,
-    error: (err)=> {
-        console.log(`There was an issue getting the config file`);
-        console.log(err);
-    },
-    success: (result)=> {
-        url = `${result.SERVER_URL}:${result.SERVER_PORT}`;
-        getHome();
-    }
 });
 
 $(`#registerInstead`).click(()=> {
@@ -766,3 +752,5 @@ $(`#removeBtn`).click(()=> {
 		}
 	});
 });
+
+getHome();
